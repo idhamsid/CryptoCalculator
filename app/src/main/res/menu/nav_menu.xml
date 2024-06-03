@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
+        <item android:title="Future Calculator">
+            <menu>
+                <item
+                    android:id="@+id/fut_pos"
+                    android:icon="@drawable/baseline_arrow_circle_right_24"
+                    android:iconTint="@color/black"
+                    android:title="Future Position Size" />
+                <item
+                    android:id="@+id/fut_pnl"
+                    android:icon="@drawable/baseline_arrow_circle_right_24"
+                    android:iconTint="@color/black"
+                    android:title="Future PNL" />
+                <item
+                    android:id="@+id/fut_target_price"
+                    android:icon="@drawable/baseline_arrow_circle_right_24"
+                    android:iconTint="@color/black"
+                    android:title="Future Target Price" />
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="none">
+
+        <item android:title="Spot Calculator">
+            <menu>
+                <item
+                    android:id="@+id/spot_pos_size"
+                    android:icon="@drawable/baseline_arrow_circle_right_24"
+                    android:iconTint="@color/black"
+                    android:title="Spot Position Size" />
+                <item
+                    android:id="@+id/spot_pnl"
+                    android:icon="@drawable/baseline_arrow_circle_right_24"
+                    android:iconTint="@color/black"
+                    android:title="Spot PNL" />
+                <item
+                    android:id="@+id/spot_target_price"
+                    android:icon="@drawable/baseline_arrow_circle_right_24"
+                    android:iconTint="@color/black"
+                    android:title="Spot Target Price" />
+            </menu>
+        </item>
+    </group>
+
+    <group
+        android:id="@+id/menu_bawah"
+        android:checkableBehavior="none">
+
+        <item android:title="Other">
+            <menu>
+                <item
+                    android:id="@+id/history"
+                    android:icon="@drawable/baseline_history_24"
+                    android:iconTint="@color/black"
+                    android:title="History Size Position" />
+                <item
+                    android:id="@+id/tips"
+                    android:icon="@drawable/baseline_help_24"
+                    android:iconTint="@color/black"
+                    android:title="Usage Tips" />
+                <item
+                    android:id="@+id/share"
+                    android:icon="@drawable/baseline_share_24"
+                    android:iconTint="@color/black"
+                    android:title="Share" />
+            </menu>
+        </item>
+    </group>
+
+</menu>
