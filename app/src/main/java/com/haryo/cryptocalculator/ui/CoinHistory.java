@@ -1,0 +1,63 @@
+package com.haryo.cryptocalculator.ui;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.haryo.cryptocalculator.R;
+import com.haryo.cryptocalculator.adapter.CoinHistoryAdapter;
+import com.haryo.cryptocalculator.isConfig.SharedPreference;
+import com.haryo.cryptocalculator.modul.DataCrypto;
+
+import java.util.ArrayList;
+
+public class CoinHistory extends AppCompatActivity {
+    private RecyclerView recCoinHistory;
+    ArrayList<DataCrypto> coinLists;
+    SharedPreference sharedPref;
+    CoinHistoryAdapter adapter;
+    GridLayoutManager mLayoutManager;
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.history_activity);
+        sharedPref = new SharedPreference();
+        coinLists = new ArrayList<>();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        try {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayShowTitleEnabled(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("History");
+            }
+        } catch (Exception e) {
+            Log.i("adslog", "exception : " + e.getMessage());
+        }
+        recCoinHistory = findViewById(R.id.recCoinHistory);
+        mLayoutManager = new GridLayoutManager(this, 1);
+        recCoinHistory.setLayoutManager(mLayoutManager);
+
+        coinLists = sharedPref.getCoins(this);
+        Log.i("adslog", "onCreate: coin list size " + coinLists.size());
+        adapter = new CoinHistoryAdapter(coinLists,CoinHistory.this);
+        recCoinHistory.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+}

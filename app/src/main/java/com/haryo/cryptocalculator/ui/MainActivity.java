@@ -1,143 +1,342 @@
 package com.haryo.cryptocalculator.ui;
 
-
-import static com.haryo.cryptocalculator.isConfig.Settings.URL_TIPS;
-
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.haryo.cryptocalculator.R;
+import com.haryo.cryptocalculator.isConfig.SharedPreference;
+import com.haryo.cryptocalculator.modul.DataCrypto;
 
-public class MainActivity extends AppCompatActivity{
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    TextInputEditText balance, riskAmount, entryPrice, stopLoss, leverage, riskPercent, takeProfit, coinName;
+    TextInputEditText riskRewardText, posSizeCoinText, posSizeUsdtText, roeUsdtText, pnlUsdtText;
+    int percent = 0;
+    int balanceInt = 0;
+    int riskAmountInt = 0;
+    MaterialButton btnSubmit;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    RadioButton longSelect, shortSelect;
+    LinearLayout barisResult, resultList;
+    RadioGroup barislima;
+    MaterialButton submitButton;
+    SharedPreference sharedPref;
+
+    int position = -1;
+    Boolean isLong = true;
+
+    @Override
+    public void onSaveInstanceState(Bundle saveInsBundleState) {
+        super.onSaveInstanceState(saveInsBundleState);
+        saveInsBundleState.putInt("pos", position);
+
+    }
+
+    DataCrypto dataCrypto;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.main_activity);
+        sharedPref = new SharedPreference();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            position = extras.getInt("pos");
+            dataCrypto = sharedPref.getCoins(this).get(position);
+        } else {
+            if (savedInstanceState != null) {
+                position = savedInstanceState.getInt("pos");
+                Log.i("adslog", "onCreate: pos " + position);
+//                dataCrypto = sharedPref.getCoins(this).get(position);
+            } else {
+                dataCrypto = null;
+                position = -1;
+            }
+        }
+
+
+        barisResult = findViewById(R.id.barisResult);
+        resultList = findViewById(R.id.resultList);
+        barislima = findViewById(R.id.barislima);
+        submitButton = findViewById(R.id.submitButton);
+
+        coinName = findViewById(R.id.coinNameText);
+        balance = findViewById(R.id.balanceText);
+        riskPercent = findViewById(R.id.riskPercentText);
+        riskAmount = findViewById(R.id.riskAmountText);
+        entryPrice = findViewById(R.id.entryPriceText);
+        takeProfit = findViewById(R.id.takeProfitText);
+        stopLoss = findViewById(R.id.stopLostText);
+        leverage = findViewById(R.id.leverageText);
+
+        riskRewardText = findViewById(R.id.riskReward);
+        posSizeCoinText = findViewById(R.id.posSizeCoin);
+        posSizeUsdtText = findViewById(R.id.posSizeUsdt);
+        roeUsdtText = findViewById(R.id.roeUsdt);
+        pnlUsdtText = findViewById(R.id.pnlUsdt);
+
+        longSelect = findViewById(R.id.longSelect);
+        shortSelect = findViewById(R.id.shortSelect);
+        btnSubmit = findViewById(R.id.submitButton);
+
         navigationView = findViewById(R.id.nav_view);
-        drawerLayout = findViewById(R.id.root);
+        drawerLayout = findViewById(R.id.main_content);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         try {
             setSupportActionBar(toolbar);
-            if (getSupportActionBar() != null) {
+            if (getSupportActionBar() != null)
                 getSupportActionBar().setDisplayShowTitleEnabled(true);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setTitle("Future Position Size");
-            }
         } catch (Exception e) {
             Log.i("adslog", "exception : " + e.getMessage());
         }
 
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.material_drawer_open, R.string.material_drawer_close);
 
-        WebView mWebView = findViewById(R.id.webview);
-        mWebView.setWebViewClient(new MyBrowser());
-        mWebView.setWebChromeClient(new ChromeClient());
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        mWebView.getSettings().setBuiltInZoomControls(true);
-        mWebView.getSettings().setDisplayZoomControls(false);
-        webSettings.setAllowFileAccess(true);
-        mWebView.requestDisallowInterceptTouchEvent(true);
-        final String s = URL_TIPS;
-        if (s.startsWith("https://")) {
-            mWebView.loadUrl(s);
-        } else if (s.startsWith("http://")) {
-            mWebView.loadUrl(s);
-        } else if (s.startsWith("file:///android_asset")) {
-            mWebView.loadUrl(s);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        barislima.setVisibility(View.VISIBLE);
+        submitButton.setVisibility(View.VISIBLE);
+
+        barisResult.setVisibility(View.GONE);
+        resultList.setVisibility(View.GONE);
+
+        if (dataCrypto != null) {
+            DataCrypto data = sharedPref.getCoins(this).get(position);
+            coinName.setText(new String(data.getCoinName()));
+            balance.setText(new String(String.valueOf(data.getBalance())));
+            riskPercent.setText(new String(String.valueOf(data.getRiskpercent())));
+            entryPrice.setText(new String(String.valueOf(data.getEntryPrice())));
+            takeProfit.setText(new String(String.valueOf(data.getTakeProfit())));
+            stopLoss.setText(new String(String.valueOf(data.getStopLost())));
+            leverage.setText(new String(String.valueOf(data.getLeverage())));
+
+            barislima.setVisibility(View.GONE);
+            submitButton.setVisibility(View.GONE);
+
+            barisResult.setVisibility(View.VISIBLE);
+            resultList.setVisibility(View.VISIBLE);
+
+            hitungPertama();
+            hitungKedua(data.getLong());
+            riskRewardText.setText(String.format(Locale.US, "%.8f", riskReward));
+            posSizeCoinText.setText(String.format(Locale.US, "%.8f", positionSizeCoin));
+            posSizeUsdtText.setText(String.format(Locale.US, "%.8f", posSizeUsdt));
+
+            roeUsdtText.setText(String.format(Locale.US, "%.8f", roeFloat));
+            pnlUsdtText.setText(String.format(Locale.US, "%.8f", pnlUsdt));
+
+        }
+        btnSubmit.setOnClickListener(v -> {
+            if (balance.getText().toString().equals("") || riskPercent.getText().toString().equals("") || entryPrice.getText().toString().equals("")
+                    || takeProfit.getText().toString().equals("") || stopLoss.getText().toString().equals("") || leverage.getText().toString().equals("")) {
+                Snackbar.make(findViewById(R.id.main_content), "Please fill the form", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.purple_700)).show();
+            } else {
+                cekEntry();
+
+//                if (longSelect.isChecked()) {
+//                    roeFloat = ((takeProfitFloat - entryPriceFloat) / (entryPriceFloat) * 100 * leverageFloat);
+//                    pnlUsdt = (posSizeUsdt * roeFloat) / 100;
+//                    isLong = true;
+//                } else {
+//                    roeFloat = ((takeProfitFloat - entryPriceFloat) / (entryPriceFloat) * 100 * leverageFloat * -1);
+//                    pnlUsdt = (posSizeUsdt * roeFloat) / 100;
+//                    isLong = false;
+//                }
+
+                hitungKedua(longSelect.isChecked());
+
+                String coinNametext = coinName.getText().toString();
+                riskRewardText.setText(String.format(Locale.US, "%.8f", riskReward));
+                posSizeCoinText.setText(String.format(Locale.US, "%.8f", positionSizeCoin));
+                posSizeUsdtText.setText(String.format(Locale.US, "%.8f", posSizeUsdt));
+
+                roeUsdtText.setText(String.format(Locale.US, "%.8f", roeFloat));
+                pnlUsdtText.setText(String.format(Locale.US, "%.8f", pnlUsdt));
+
+                DataCrypto developers = new DataCrypto(coinNametext, balanceFloat, riskPercentFloat
+                        , entryPriceFloat, stopLossFloat,
+                        takeProfitFloat, riskAmountFloat, leverageFloat, isLong, getDateNow());
+                sharedPref.addCoin(this, developers);
+
+
+                barislima.setVisibility(View.GONE);
+                submitButton.setVisibility(View.GONE);
+
+                barisResult.setVisibility(View.VISIBLE);
+                resultList.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+
+        balance.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                balanceInt = 0;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+
+            public void afterTextChanged(Editable s) {
+                String str = new String(s.toString());
+                if (str.equals(""))
+                    balanceInt = 0;
+                else
+                    balanceInt = Integer.parseInt(new String(s.toString()));
+                if (percent != 0) {
+                    riskAmountInt = balanceInt * percent / 100;
+                    riskAmount.setText(String.valueOf(riskAmountInt));
+                } else
+                    riskAmount.setText(new String(s.toString()));
+
+            }
+        });
+        riskPercent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                percent = 0;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String str = new String(s.toString());
+                if (str.equals(""))
+                    percent = 0;
+                else
+                    percent = Integer.parseInt(new String(s.toString()));
+                if (balanceInt != 0) {
+                    riskAmountInt = balanceInt * percent / 100;
+                    riskAmount.setText(String.valueOf(riskAmountInt));
+                } else
+                    riskAmount.setText(new String(s.toString()));
+
+            }
+        });
+    }
+
+    private void hitungKedua(boolean checked) {
+        if (checked) {
+            roeFloat = ((takeProfitFloat - entryPriceFloat) / (entryPriceFloat) * 100 * leverageFloat);
+            pnlUsdt = (posSizeUsdt * roeFloat) / 100;
+            isLong = true;
         } else {
-            mWebView.loadDataWithBaseURL(null, "<head><style>img{max-width: 100%; width:auto; height: auto;}</style></head>" + s, "text/html", "UTF-8", null);
-        }
-
-    }
-
-    private class MyBrowser extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
-            view.loadUrl(url);
-            return true; // in both cases we handle the link manually
-
-        }
-
-        public void onReceivedError(WebView view, int errorCode, String description, String
-                failingUrl) {
-            Toast.makeText(MainActivity.this, "please activate internet !! ", Toast.LENGTH_SHORT).show();
-
-            view.loadUrl("about:blank");
-        }
-
-    }
-
-    private class ChromeClient extends WebChromeClient {
-        protected FrameLayout mFullscreenContainer;
-        private View mCustomView;
-        private WebChromeClient.CustomViewCallback mCustomViewCallback;
-        private int mOriginalOrientation;
-        private int mOriginalSystemUiVisibility;
-
-        ChromeClient() {
-        }
-
-        public Bitmap getDefaultVideoPoster() {
-            if (mCustomView == null) {
-                return null;
-            }
-            return BitmapFactory.decodeResource(getApplicationContext().getResources(), 2130837573);
-        }
-
-        public void onHideCustomView() {
-            ((FrameLayout) getWindow().getDecorView()).removeView(this.mCustomView);
-            this.mCustomView = null;
-            getWindow().getDecorView().setSystemUiVisibility(this.mOriginalSystemUiVisibility);
-            setRequestedOrientation(this.mOriginalOrientation);
-            this.mCustomViewCallback.onCustomViewHidden();
-            this.mCustomViewCallback = null;
-        }
-
-        public void onShowCustomView(View paramView, WebChromeClient.CustomViewCallback paramCustomViewCallback) {
-            if (this.mCustomView != null) {
-                onHideCustomView();
-                return;
-            }
-            this.mCustomView = paramView;
-            this.mOriginalSystemUiVisibility = getWindow().getDecorView().getSystemUiVisibility();
-            this.mOriginalOrientation = getRequestedOrientation();
-            this.mCustomViewCallback = paramCustomViewCallback;
-            ((FrameLayout) getWindow().getDecorView()).addView(this.mCustomView, new FrameLayout.LayoutParams(-1, -1));
-            getWindow().getDecorView().setSystemUiVisibility(3846 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            roeFloat = ((takeProfitFloat - entryPriceFloat) / (entryPriceFloat) * 100 * leverageFloat * -1);
+            pnlUsdt = (posSizeUsdt * roeFloat) / 100;
+            isLong = false;
         }
     }
+
+
+    float leverageFloat, balanceFloat, riskPercentFloat, riskAmountFloat,
+            takeProfitFloat, stopLossFloat, entryPriceFloat,
+            riskReward, positionSizeCoin, posSizeUsdt, roeFloat, pnlUsdt;
+
+    private void cekEntry() {
+        String balanceText = balance.getText().toString();
+        String riskPercentText = riskPercent.getText().toString();
+        String riskAmountText = riskAmount.getText().toString();
+        String entryText = entryPrice.getText().toString();
+        String takeProfitText = takeProfit.getText().toString();
+        String stopLossText = stopLoss.getText().toString();
+        String leverageText = leverage.getText().toString();
+        String dateNow = getDateNow();
+
+        balanceFloat = Float.parseFloat(balanceText);
+        riskPercentFloat = Float.parseFloat(riskPercentText);
+        riskAmountFloat = Float.parseFloat(riskAmountText);
+        entryPriceFloat = Float.parseFloat(entryText);
+        takeProfitFloat = Float.parseFloat(takeProfitText);
+        stopLossFloat = Float.parseFloat(stopLossText);
+        leverageFloat = Float.parseFloat(leverageText);
+
+        Log.w("adslog", "date now :  " + dateNow);
+        hitungPertama();
+    }
+
+    private void hitungPertama() {
+        riskReward = (takeProfitFloat - entryPriceFloat) / (entryPriceFloat - stopLossFloat);
+        positionSizeCoin = leverageFloat * ((riskAmountFloat * entryPriceFloat) / (leverageFloat * (stopLossFloat * entryPriceFloat)) / entryPriceFloat) * -1;
+        posSizeUsdt = (entryPriceFloat * positionSizeCoin) / leverageFloat;
+    }
+
+    private String getDateNow() {
+        Date c = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + c);
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String formattedDate = df.format(c);
+        return formattedDate;
+    }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Log.i("adslog", "onNavigationItemSelected: " + item.getItemId());
         switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
+            case R.id.fut_pos:
+                break;
+            case R.id.spot_pos_size:
+                Intent spot = new Intent(MainActivity.this, SpotPosSizeActivity.class);
+                startActivity(spot);
+
+                break;
+            case R.id.fut_pnl:
+                Intent fut = new Intent(MainActivity.this, FuturePnlActivity.class);
+                startActivity(fut);
+                break;
+            case R.id.history:
+                Intent his = new Intent(MainActivity.this, CoinHistory.class);
+                startActivity(his);
+                finish();
                 break;
         }
+        drawerLayout.closeDrawer(GravityCompat.START);
+
         return true;
     }
+
+
 }

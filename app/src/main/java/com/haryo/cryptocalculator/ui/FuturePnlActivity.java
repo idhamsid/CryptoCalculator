@@ -20,9 +20,6 @@ import com.haryo.cryptocalculator.R;
 
 public class FuturePnlActivity extends AppCompatActivity {
     TextInputEditText initialMargin, exitPrice, entryPrice, leverage, quantity, roe, pnl;
-    int percent = 0;
-    int balanceInt = 0;
-    int riskAmountInt = 0;
     MaterialButton calculate,refreshBtn;
     RadioButton longSelect, shortSelect;
     float leverageFloat, initMarginFloat, exitPriceFloat, entryPriceFloat, quantityFloat, roeFloat, pnlFloat;

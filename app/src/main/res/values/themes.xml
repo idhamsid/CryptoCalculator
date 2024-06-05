@@ -13,6 +13,7 @@
         <item name="android:statusBarColor">#3E3E3E</item>
         <item name="android:popupBackground">@color/gray</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/background</item>
 
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
