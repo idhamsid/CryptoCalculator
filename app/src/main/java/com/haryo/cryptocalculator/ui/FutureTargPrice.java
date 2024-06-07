@@ -80,6 +80,9 @@ public class FutureTargPrice extends AppCompatActivity {
                     }else {
                         targetPriceFloat = entryPriceFloat - ((entryPriceFloat*roeFloat/100)/leverageFloat);
                     }
+                    if (targetPriceFloat < 0) {
+                        targetPriceText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    }
                     targetPriceText.setText(String.valueOf(targetPriceFloat));
                 }
             }

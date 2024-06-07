@@ -1,5 +1,10 @@
 package com.haryo.cryptocalculator.ui;
 
+import static com.haryo.cryptocalculator.isConfig.Settings.LAMA_LOAD_ADS;
+
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -7,6 +12,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +23,9 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.haryo.cryptocalculator.R;
+import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 
 public class SpotPosSizeActivity extends AppCompatActivity {
     TextInputEditText balance, riskAmount, entryPrice, stopLoss,
@@ -25,11 +34,13 @@ public class SpotPosSizeActivity extends AppCompatActivity {
     int percent = 0;
     int balanceInt = 0;
     int riskAmountInt = 0;
-    LinearLayout resultList,barisResult;
+    LinearLayout resultList, barisResult;
     MaterialButton btnSubmit, resetButton;
     float balanceFloat, riskPercentFloat, riskAmountFloat, entryPriceFloat, stopLossFloat, takeProfitFloat, feeFloat;
     float riskRewardFloat, aFloat, posSizeFloat, positionSizeUSDT, roeFloat, pnlUSDT;
 
+    RelativeLayout adsBanner;
+    TextInputLayout entryPriceLay,takeProfit,stopLostLay,posSizeCoinName,posSizeUsdtName;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +72,51 @@ public class SpotPosSizeActivity extends AppCompatActivity {
         barisResult.setVisibility(View.GONE);
         btnSubmit.setVisibility(View.VISIBLE);
         resetButton.setVisibility(View.GONE);
+        adsBanner = findViewById(R.id.adsBanner);
+
+        entryPriceLay= findViewById(R.id.entryPrice);
+        takeProfit= findViewById(R.id.takeProfit);
+        stopLostLay= findViewById(R.id.stopLost);
+        posSizeCoinName= findViewById(R.id.posSizeCoinName);
+
+
+        isAdsConfig.loadInters(this, false);
+        isAdsConfig.callNative(this, adsBanner, R.layout.admob_native_big, R.layout.max_big_native);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        entryPriceLay.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), entryPrice.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(SpotPosSizeActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+            }
+        });
+        takeProfit.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), takeProfitText.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(SpotPosSizeActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+            }
+        });
+        stopLostLay.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), stopLoss.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(SpotPosSizeActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+            }
+        });
+        posSizeCoinName.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), posSizeCoin.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(SpotPosSizeActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+            }
+        });
         try {
             setSupportActionBar(toolbar);
             if (getSupportActionBar() != null) {
@@ -98,35 +152,23 @@ public class SpotPosSizeActivity extends AppCompatActivity {
                         || takeProfitText.getText().toString().equals("") || stopLoss.getText().toString().equals("")) {
                     Snackbar.make(findViewById(R.id.main_content), "Please fill the form", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.purple_700)).show();
                 } else {
-                    resultList.setVisibility(View.VISIBLE);
-                    barisResult.setVisibility(View.VISIBLE);
-                    resetButton.setVisibility(View.VISIBLE);
-                    btnSubmit.setVisibility(View.GONE);
+                    isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                        @Override
+                        public void onClose() {
+                            proses();
+                        }
 
-                    balanceFloat = Float.parseFloat(balance.getText().toString());
-                    riskPercentFloat = Float.parseFloat(riskPercent.getText().toString());
-                    riskAmountFloat = Float.parseFloat(riskAmount.getText().toString());
-                    entryPriceFloat = Float.parseFloat(entryPrice.getText().toString());
-                    takeProfitFloat = Float.parseFloat(takeProfitText.getText().toString());
-                    stopLossFloat = Float.parseFloat(stopLoss.getText().toString());
-                    if (feeText.getText().toString().equals("")) {
-                        feeFloat = 0;
-                    } else {
-                        feeFloat = Float.parseFloat(feeText.getText().toString());
-                    }
-                    riskRewardFloat = (takeProfitFloat - entryPriceFloat) / (entryPriceFloat - stopLossFloat);
-                    aFloat = (1 * ((riskAmountFloat * entryPriceFloat) / (1 * (stopLossFloat)))) * -1;
-                    posSizeFloat = aFloat - (aFloat * feeFloat);
-                    positionSizeUSDT = entryPriceFloat * posSizeFloat;
-                    roeFloat = ((takeProfitFloat - entryPriceFloat) / entryPriceFloat) * 100;
-                    pnlUSDT = (positionSizeUSDT * roeFloat) / 100;
+                        @Override
+                        public void onShow() {
 
-                    riskReward.setText(String.valueOf(riskRewardFloat));
-                    posSizeCoin.setText(String.valueOf(posSizeFloat));
-                    posSizeUsdt.setText(String.valueOf(positionSizeUSDT));
-                    roeUsdt.setText(String.valueOf(roeFloat));
-                    pnlUsdt.setText(String.valueOf(pnlUSDT));
+                        }
 
+                        @Override
+                        public void onNotShow() {
+                            proses();
+                        }
+                    });
+                    isAdsConfig.showInterst(this,true,LAMA_LOAD_ADS);
                 }
             }
         });
@@ -183,6 +225,59 @@ public class SpotPosSizeActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void proses() {
+        resultList.setVisibility(View.VISIBLE);
+        barisResult.setVisibility(View.VISIBLE);
+        resetButton.setVisibility(View.VISIBLE);
+        btnSubmit.setVisibility(View.GONE);
+
+        balanceFloat = Float.parseFloat(balance.getText().toString());
+        riskPercentFloat = Float.parseFloat(riskPercent.getText().toString());
+        riskAmountFloat = Float.parseFloat(riskAmount.getText().toString());
+        entryPriceFloat = Float.parseFloat(entryPrice.getText().toString());
+        takeProfitFloat = Float.parseFloat(takeProfitText.getText().toString());
+        stopLossFloat = Float.parseFloat(stopLoss.getText().toString());
+        if (feeText.getText().toString().equals("")) {
+            feeFloat = 0;
+        } else {
+            feeFloat = Float.parseFloat(feeText.getText().toString());
+        }
+        riskRewardFloat = (takeProfitFloat - entryPriceFloat) / (entryPriceFloat - stopLossFloat);
+        aFloat = (1 * ((riskAmountFloat * entryPriceFloat) / (1 * (stopLossFloat)))) * -1;
+        posSizeFloat = aFloat - (aFloat * feeFloat);
+        positionSizeUSDT = entryPriceFloat * posSizeFloat;
+        roeFloat = ((takeProfitFloat - entryPriceFloat) / entryPriceFloat) * 100;
+        pnlUSDT = (positionSizeUSDT * roeFloat) / 100;
+
+        if (riskRewardFloat < 0) {
+            riskReward.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+        }
+        if (posSizeFloat < 0) {
+            posSizeCoin.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+        }
+        if (positionSizeUSDT < 0) {
+            posSizeUsdt.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+        }
+        if (roeFloat < 0) {
+            roeUsdt.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+        }
+        if (pnlUSDT < 0) {
+            pnlUsdt.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+        }
+
+
+        riskReward.setText(String.valueOf(riskRewardFloat));
+        posSizeCoin.setText(String.valueOf(posSizeFloat));
+        posSizeUsdt.setText(String.valueOf(positionSizeUSDT));
+        roeUsdt.setText(String.valueOf(roeFloat));
+        pnlUsdt.setText(String.valueOf(pnlUSDT));
+
+        isAdsConfig.clearBanner(adsBanner);
+        isAdsConfig.callBanner(SpotPosSizeActivity.this, adsBanner);
+
+
     }
 
     @Override

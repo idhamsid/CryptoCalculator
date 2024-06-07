@@ -6,6 +6,7 @@ import android.text.Spanned;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.haryo.cryptocalculator.R;
+import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 
 public class SpotProfitPriceActivity extends AppCompatActivity {
 
@@ -22,6 +24,7 @@ public class SpotProfitPriceActivity extends AppCompatActivity {
     TextInputEditText sellPriceText,profitText2;
     MaterialButton submitButton,refreshBtn;
     long amountFloat,buyPriceFloat,profitFloat,sellPricefloat,profit2Float;
+    RelativeLayout adsBanner;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +43,8 @@ public class SpotProfitPriceActivity extends AppCompatActivity {
 
         sellPriceText = findViewById(R.id.sellPriceText);
         profitText2 = findViewById(R.id.profitText2);
-
-
+        adsBanner = findViewById(R.id.adsBanner);
+        isAdsConfig.callBanner(this,adsBanner);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         try {
@@ -77,6 +80,14 @@ public class SpotProfitPriceActivity extends AppCompatActivity {
                     sellPricefloat= (profitFloat + (amountFloat * buyPriceFloat)) / amountFloat;
                     profit2Float = ((sellPricefloat - buyPriceFloat) / buyPriceFloat) * 100;
 
+
+
+                    if (sellPricefloat < 0) {
+                        sellPriceText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    }
+                    if (profit2Float < 0) {
+                        profitText2.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    }
                     sellPriceText.setText(String.valueOf(sellPricefloat));
                     profitText2.setText(String.valueOf(profit2Float));
                 }

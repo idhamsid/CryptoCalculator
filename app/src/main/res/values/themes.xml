@@ -53,10 +53,11 @@
     <style name="EditFileld"
         parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/black</item>
-        <item name="backgroundColor">@color/white</item>
+        <item name="backgroundColor">@color/black</item>
         <item name="boxStrokeWidth">1dp</item>
-        <item name="errorEnabled">true</item>
+        <item name="errorEnabled">false</item>
         <item name="hintTextColor">@color/black</item>
+        <item name="android:textColorHint">@color/black</item>
     </style>
 
 

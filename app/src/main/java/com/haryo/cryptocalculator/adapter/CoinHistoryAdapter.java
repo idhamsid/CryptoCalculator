@@ -1,5 +1,7 @@
 package com.haryo.cryptocalculator.adapter;
 
+import static com.haryo.cryptocalculator.isConfig.Settings.LAMA_LOAD_ADS;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -96,7 +98,7 @@ public class CoinHistoryAdapter extends RecyclerView.Adapter {
                             context.startActivity(futurePos);
                         }
                     });
-                    isAdsConfig.showInterst((Activity) context,false);
+                    isAdsConfig.showInterst((Activity) context,true,LAMA_LOAD_ADS);
                 }
             });
         }

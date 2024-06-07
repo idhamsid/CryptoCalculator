@@ -139,7 +139,7 @@ public class isAdsConfig {
         interstitialAd.loadAd();
     }
 
-    public static void showInterst(Activity activity,Boolean showLoadDialog) {
+    public static void showInterst(Activity activity,Boolean showLoadDialog,Integer lamaLoad) {
         if (COUNTER >= INTERVAL) {
             if (showLoadDialog) {
                 showDialog(activity);
@@ -184,7 +184,7 @@ public class isAdsConfig {
                     loadInters(activity, false);
                     COUNTER = 0;
                 }
-            },LAMA_LOAD_ADS*1000);
+            },lamaLoad*1000);
 
         } else{
             isListener.onNotShow();

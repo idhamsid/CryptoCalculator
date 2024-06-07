@@ -14,6 +14,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -23,11 +24,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.haryo.cryptocalculator.R;
+import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 
 public class UsageActivity extends AppCompatActivity{
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-
+    RelativeLayout adsBanner;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,8 @@ public class UsageActivity extends AppCompatActivity{
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.root);
         Toolbar toolbar = findViewById(R.id.toolbar);
-
+        adsBanner = findViewById(R.id.adsBanner);
+        isAdsConfig.callBanner(this,adsBanner);
         try {
             setSupportActionBar(toolbar);
             if (getSupportActionBar() != null) {

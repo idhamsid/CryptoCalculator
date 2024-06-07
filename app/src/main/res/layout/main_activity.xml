@@ -95,8 +95,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/barisatu">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/riskPercent"
                         style="@style/EditFileld"
+                        android:id="@+id/riskPercent"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"

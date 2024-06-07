@@ -73,6 +73,11 @@
                     android:icon="@drawable/baseline_share_24"
                     android:iconTint="@color/black"
                     android:title="Share" />
+                <item
+                    android:id="@+id/about"
+                    android:icon="@drawable/baseline_info_24"
+                    android:iconTint="@color/black"
+                    android:title="About" />
             </menu>
         </item>
     </group>

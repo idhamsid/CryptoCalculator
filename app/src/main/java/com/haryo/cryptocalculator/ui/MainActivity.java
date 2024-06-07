@@ -1,10 +1,18 @@
 package com.haryo.cryptocalculator.ui;
 
+import static com.haryo.cryptocalculator.isConfig.Settings.LAMA_LOAD_ADS;
 import static com.haryo.cryptocalculator.isConfig.isAdsConfig.nativeAd;
 import static com.haryo.cryptocalculator.isConfig.isAdsConfig.nativeAdLoader;
 import static com.haryo.cryptocalculator.isConfig.isAdsConfig.nativeAdMax;
 
+import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
@@ -15,14 +23,19 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -33,6 +46,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.haryo.cryptocalculator.BuildConfig;
 import com.haryo.cryptocalculator.R;
 import com.haryo.cryptocalculator.isConfig.SharedPreference;
 import com.haryo.cryptocalculator.isConfig.isAdsConfig;
@@ -52,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     LinearLayout barisResult, resultList;
     TextInputEditText balance, riskAmount, entryPrice, stopLoss, leverage, riskPercent, takeProfit, coinName;
+    TextInputLayout entryPriceLay,takeProfitLay,stopLost,posSizeCoinName,posSizeUsdtName;
     TextInputEditText riskRewardText, posSizeCoinText, posSizeUsdtText, roeUsdtText, pnlUsdtText;
     RadioButton longSelect, shortSelect;
     RadioGroup barislima;
@@ -72,10 +88,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DataCrypto dataCrypto;
 
     @Override
+    public void onBackPressed() {
+        dialogExit();
+    }
+
+    void dialogExit() {
+        final Dialog dialog = new Dialog(MainActivity.this, R.style.SheetDialog);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_open);
+
+        Button tbOpen = dialog.findViewById(R.id.tbYes);
+        tbOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        isAdsConfig.callNative(MainActivity.this,dialog.findViewById(R.id.layAds),R.layout.admob_native_big,R.layout.max_big_native);
+        Button open = dialog.findViewById(R.id.tbRate);
+        open.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="
+                        + BuildConfig.APPLICATION_ID)));
+            }
+        });
+        ImageButton tbClose = dialog.findViewById(R.id.imgExit);
+        tbClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         sharedPref = new SharedPreference();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -157,6 +211,60 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adsBanner = findViewById(R.id.adsBanner);
         isAdsConfig.loadInters(this, false);
         isAdsConfig.callNative(this, adsBanner, R.layout.admob_native_big, R.layout.max_big_native);
+
+
+        entryPriceLay = findViewById(R.id.entryPrice);
+        takeProfitLay = findViewById(R.id.takeProfit);
+        stopLost = findViewById(R.id.stopLost);
+        posSizeCoinName = findViewById(R.id.posSizeCoinName);
+        posSizeUsdtName = findViewById(R.id.posSizeUsdtName);
+
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        entryPriceLay.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), entryPrice.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(MainActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+            }
+        });
+        takeProfitLay.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), takeProfit.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(MainActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        stopLost.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), stopLoss.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(MainActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        posSizeCoinName.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), posSizeCoinText.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(MainActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        posSizeUsdtName.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), posSizeUsdtText.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(MainActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         proses();
                     }
                 });
-                isAdsConfig.showInterst(MainActivity.this,true);
+                isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
             }
         });
 
@@ -405,7 +513,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClose() {
                         startActivity(spot);
-                        finish();
                     }
 
                     @Override
@@ -415,19 +522,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onNotShow() {
                         startActivity(spot);
-                        finish();
                     }
                 });
-                isAdsConfig.showInterst(MainActivity.this, false);
+                isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
                 break;
             case R.id.fut_pnl:
                 Intent fut = new Intent(MainActivity.this, FuturePnlActivity.class);
                 isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
                     @Override
                     public void onClose() {
-
                         startActivity(fut);
-                        finish();
                     }
 
                     @Override
@@ -437,10 +541,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onNotShow() {
                         startActivity(fut);
-                        finish();
                     }
                 });
-                isAdsConfig.showInterst(MainActivity.this, false);
+                isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
                 break;
             case R.id.history:
                 Intent his = new Intent(MainActivity.this, CoinHistory.class);
@@ -448,7 +551,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClose() {
                         startActivity(his);
-                        finish();
                     }
 
                     @Override
@@ -458,10 +560,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onNotShow() {
                         startActivity(his);
-                        finish();
                     }
                 });
-                isAdsConfig.showInterst(MainActivity.this, false);
+                isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
                 break;
             case R.id.fut_target_price:
                 Intent ftp = new Intent(MainActivity.this, FutureTargPrice.class);
@@ -469,21 +570,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
                     @Override
                     public void onClose() {
-                        isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
-                            @Override
-                            public void onClose() {
-                                proses();
-                            }
-
-                            @Override
-                            public void onShow() {
-                            }
-
-                            @Override
-                            public void onNotShow() {
-                                proses();
-                            }
-                        });
+                        startActivity(ftp);
                     }
 
                     @Override
@@ -492,24 +579,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     @Override
                     public void onNotShow() {
-                        isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
-                            @Override
-                            public void onClose() {
-                                proses();
-                            }
-
-                            @Override
-                            public void onShow() {
-                            }
-
-                            @Override
-                            public void onNotShow() {
-                                proses();
-                            }
-                        });
+                        startActivity(ftp);
                     }
                 });
-                isAdsConfig.showInterst(MainActivity.this, false);
+                isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
                 break;
             case R.id.tips:
                 Intent usage = new Intent(MainActivity.this, UsageActivity.class);
@@ -517,21 +590,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
                     @Override
                     public void onClose() {
-                        isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
-                            @Override
-                            public void onClose() {
-                                proses();
-                            }
-
-                            @Override
-                            public void onShow() {
-                            }
-
-                            @Override
-                            public void onNotShow() {
-                                proses();
-                            }
-                        });
+                        startActivity(usage);
                     }
 
                     @Override
@@ -540,24 +599,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     @Override
                     public void onNotShow() {
-                        isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
-                            @Override
-                            public void onClose() {
-                                proses();
-                            }
-
-                            @Override
-                            public void onShow() {
-                            }
-
-                            @Override
-                            public void onNotShow() {
-                                proses();
-                            }
-                        });
+                        startActivity(usage);
                     }
                 });
-                isAdsConfig.showInterst(MainActivity.this, false);
+                isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
                 break;
             case R.id.spot_profit:
                 Intent spot_profit = new Intent(MainActivity.this, SpotProfitActivity.class);
@@ -566,7 +611,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClose() {
                         startActivity(spot_profit);
-                        finish();
                     }
 
                     @Override
@@ -576,19 +620,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onNotShow() {
                         startActivity(spot_profit);
-                        finish();
                     }
                 });
-                isAdsConfig.showInterst(MainActivity.this, false);
+                isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
                 break;
             case R.id.spot_provit_price:
                 Intent spot_provit_price = new Intent(MainActivity.this, SpotProfitPriceActivity.class);
-
                 isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
                     @Override
                     public void onClose() {
                         startActivity(spot_provit_price);
-                        finish();
                     }
 
                     @Override
@@ -598,10 +639,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onNotShow() {
                         startActivity(spot_provit_price);
-                        finish();
                     }
                 });
-                isAdsConfig.showInterst(MainActivity.this, false);
+                isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
+                break;
+            case R.id.about:
+                showAbout();
                 break;
         }
 
@@ -610,7 +653,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
+    private void showAbout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                .setIcon(R.mipmap.ic_launcher)
+                .setTitle(getString(R.string.app_name))
+                .setMessage(getString(R.string.message_about))
+                .setPositiveButton("OK", (DialogInterface.OnClickListener) (dialog, which) -> {
+                    // When the user click yes button then app will close
+                    finish();
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
     InputFilter filter = new InputFilter() {
         public CharSequence filter(CharSequence source, int start, int end,
                                    Spanned dest, int dstart, int dend) {

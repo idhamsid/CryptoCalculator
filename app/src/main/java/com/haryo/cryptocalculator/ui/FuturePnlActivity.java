@@ -76,17 +76,34 @@ public class FuturePnlActivity extends AppCompatActivity {
             } else {
                     cekEntry();
                 if (longSelect.isChecked()) {
+
+                    if (roeFloat < 0) {
+                        roe.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    }
+                    if (quantityFloat < 0) {
+                        quantity.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    }
+                    if (pnlFloat < 0) {
+                        pnl.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    }
                     quantity.setText(String.valueOf(quantityFloat));
                     roe.setText(String.valueOf(roeFloat));
                     pnl.setText(String.valueOf(pnlFloat));
 
                 } else if (shortSelect.isChecked()) {
+                    if (quantityFloat < 0) {
+                        quantity.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    }
                     quantity.setText(String.valueOf(quantityFloat));
-
                     float roeShort = roeFloat * -1;
+                    if (roeShort < 0) {
+                        roe.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    }
                     roe.setText(String.valueOf(roeShort));
-
                     float pnlfloatShort = pnlFloat * -1;
+                    if (pnlfloatShort < 0) {
+                        pnl.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    }
                     pnl.setText(String.valueOf(pnlfloatShort));
                 }
             }
