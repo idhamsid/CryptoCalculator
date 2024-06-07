@@ -3,6 +3,7 @@ package com.haryo.cryptocalculator.ui;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.haryo.cryptocalculator.R;
 import com.haryo.cryptocalculator.adapter.CoinHistoryAdapter;
 import com.haryo.cryptocalculator.isConfig.SharedPreference;
+import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 import com.haryo.cryptocalculator.modul.DataCrypto;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class CoinHistory extends AppCompatActivity {
     SharedPreference sharedPref;
     CoinHistoryAdapter adapter;
     GridLayoutManager mLayoutManager;
+    RelativeLayout adsBanner;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +33,7 @@ public class CoinHistory extends AppCompatActivity {
         sharedPref = new SharedPreference();
         coinLists = new ArrayList<>();
         Toolbar toolbar = findViewById(R.id.toolbar);
-
+        adsBanner = findViewById(R.id.adsBanner);
         try {
             setSupportActionBar(toolbar);
             if (getSupportActionBar() != null) {
@@ -44,7 +47,8 @@ public class CoinHistory extends AppCompatActivity {
         recCoinHistory = findViewById(R.id.recCoinHistory);
         mLayoutManager = new GridLayoutManager(this, 1);
         recCoinHistory.setLayoutManager(mLayoutManager);
-
+        isAdsConfig.callBanner(this,adsBanner);
+        isAdsConfig.loadInters(this,false);
         coinLists = sharedPref.getCoins(this);
         Log.i("adslog", "onCreate: coin list size " + coinLists.size());
         adapter = new CoinHistoryAdapter(coinLists,CoinHistory.this);

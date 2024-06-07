@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.haryo.cryptocalculator.R;
+import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 
 public class FutureTargPrice extends AppCompatActivity {
     TextInputEditText roeText, exitPrice, entryPrice, leverage,targetPriceText;
@@ -26,7 +28,7 @@ public class FutureTargPrice extends AppCompatActivity {
             exitPriceFloat,
             roeFloat,
             targetPriceFloat;
-
+    RelativeLayout adsBanner;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,8 @@ public class FutureTargPrice extends AppCompatActivity {
         shortSelect = findViewById(R.id.shortSelect);
         submitButton = findViewById(R.id.submitButton);
         refreshBtn = findViewById(R.id.refreshBtn);
-
+        adsBanner = findViewById(R.id.adsBanner);
+        isAdsConfig.callBanner(this,adsBanner);
         Toolbar toolbar = findViewById(R.id.toolbar);
         try {
             setSupportActionBar(toolbar);

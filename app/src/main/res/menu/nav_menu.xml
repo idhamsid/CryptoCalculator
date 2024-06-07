@@ -8,11 +8,11 @@
         android:checkableBehavior="single">
         <item android:title="Future Calculator">
             <menu>
-                <item
+                <!--<item
                     android:id="@+id/fut_pos"
                     android:icon="@drawable/baseline_arrow_circle_right_24"
                     android:iconTint="@color/black"
-                    android:title="Future Position Size" />
+                    android:title="Future Position Size" />-->
                 <item
                     android:id="@+id/fut_pnl"
                     android:icon="@drawable/baseline_arrow_circle_right_24"

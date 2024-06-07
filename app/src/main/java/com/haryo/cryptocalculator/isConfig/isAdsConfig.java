@@ -5,6 +5,7 @@ import static com.haryo.cryptocalculator.isConfig.Settings.BANNER;
 import static com.haryo.cryptocalculator.isConfig.Settings.COUNTER;
 import static com.haryo.cryptocalculator.isConfig.Settings.INTER;
 import static com.haryo.cryptocalculator.isConfig.Settings.INTERVAL;
+import static com.haryo.cryptocalculator.isConfig.Settings.LAMA_LOAD_ADS;
 import static com.haryo.cryptocalculator.isConfig.Settings.MAX_BANNER;
 import static com.haryo.cryptocalculator.isConfig.Settings.MAX_INTERST;
 import static com.haryo.cryptocalculator.isConfig.Settings.MAX_NATIV;
@@ -13,11 +14,14 @@ import static com.haryo.cryptocalculator.isConfig.Settings.NATIV;
 import static com.haryo.cryptocalculator.isConfig.Settings.REWARD_VIDEO;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -135,40 +139,60 @@ public class isAdsConfig {
         interstitialAd.loadAd();
     }
 
-    public static void showInterst(Activity activity) {
+    public static void showInterst(Activity activity,Boolean showLoadDialog) {
         if (COUNTER >= INTERVAL) {
-            if (mInterstitialAd != null) {
-                mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                    @Override
-                    public void onAdDismissedFullScreenContent() {
-                        super.onAdDismissedFullScreenContent();
-                        isListener.onClose();
-                    }
-
-                    @Override
-                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
-                        super.onAdFailedToShowFullScreenContent(adError);
-                        Log.e("adslog", "onAdFailedToShowFullScreenContent: admob ");
-                        backupShowInters(activity);
-                    }
-
-                    @Override
-                    public void onAdShowedFullScreenContent() {
-                        super.onAdShowedFullScreenContent();
-                        isListener.onShow();
-                    }
-                });
-                mInterstitialAd.show(activity);
-            } else {
-                Log.e("adslog", "showInterst: admob null");
-                backupShowInters(activity);
+            if (showLoadDialog) {
+                showDialog(activity);
+                dialog.show();
             }
-            loadInters(activity, false);
-            COUNTER = 0;
-        } else COUNTER++;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (mInterstitialAd != null) {
+                        mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                            @Override
+                            public void onAdDismissedFullScreenContent() {
+                                super.onAdDismissedFullScreenContent();
+                                isListener.onClose();
+                            }
+
+                            @Override
+                            public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                                super.onAdFailedToShowFullScreenContent(adError);
+                                Log.e("adslog", "onAdFailedToShowFullScreenContent: admob ");
+                                backupShowInters(activity,showLoadDialog);
+                                if (showLoadDialog) {
+                                    dialog.dismiss();
+                                }
+                            }
+
+                            @Override
+                            public void onAdShowedFullScreenContent() {
+                                super.onAdShowedFullScreenContent();
+                                isListener.onShow();
+                                if (showLoadDialog) {
+                                    dialog.dismiss();
+                                }
+                            }
+                        });
+                        mInterstitialAd.show(activity);
+                    } else {
+                        Log.e("adslog", "showInterst: admob null");
+                        backupShowInters(activity,showLoadDialog);
+                    }
+                    loadInters(activity, false);
+                    COUNTER = 0;
+                }
+            },LAMA_LOAD_ADS*1000);
+
+        } else{
+            isListener.onNotShow();
+            COUNTER++;
+        }
     }
 
-    private static void backupShowInters(Activity activity) {
+    private static void backupShowInters(Activity activity,Boolean showLoadDialog) {
         if (interstitialAd.isReady()) {
             interstitialAd.setListener(new MaxAdListener() {
                 @Override
@@ -180,6 +204,9 @@ public class isAdsConfig {
                 public void onAdDisplayed(MaxAd ad) {
                     Log.i("adslog", "onAdDisplayed: ");
                     isListener.onShow();
+                    if (showLoadDialog) {
+                        dialog.dismiss();
+                    }
                 }
 
                 @Override
@@ -202,6 +229,9 @@ public class isAdsConfig {
                 public void onAdDisplayFailed(MaxAd ad, MaxError error) {
                     Log.i("adslog", "onAdDisplayFailed: ");
                     isListener.onNotShow();
+                    if (showLoadDialog) {
+                        dialog.dismiss();
+                    }
                 }
             });
             interstitialAd.showAd();
@@ -291,7 +321,7 @@ public class isAdsConfig {
     public static MaxNativeAdView nativeAdView;
     public static MaxNativeAdLoader nativeAdLoader;
 
-    public static void callNative(Activity activity, FrameLayout layNative, int layoutAdmobNative,
+    public static void callNative(Activity activity, RelativeLayout layNative, int layoutAdmobNative,
                                   int layoutMaxNative) {
         AdLoader.Builder builder = new AdLoader.Builder(activity, NATIV);
         builder.forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
@@ -336,7 +366,7 @@ public class isAdsConfig {
         adLoader.loadAd(request);
     }
 
-    public static void backupNative(Activity activity, FrameLayout layNative,
+    public static void backupNative(Activity activity, RelativeLayout layNative,
                                     int layoutMaxNative) {
         MaxNativeAdViewBinder binder = new MaxNativeAdViewBinder.Builder(layoutMaxNative)
                 .setTitleTextViewId(R.id.title_text_view)
@@ -530,6 +560,17 @@ public class isAdsConfig {
                 adViewMax.loadAd();
             }
         });
+    }
+
+    private static Dialog dialog;
+    private static void showDialog(Activity activity) {
+        dialog = new Dialog(activity,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.load_activity);
+    }
+    public static void clearBanner(RelativeLayout adsLay){
+        adsLay.removeAllViews();
     }
     private static AdSize getAdSize(Activity activity) {
         Display display = activity.getWindowManager().getDefaultDisplay();

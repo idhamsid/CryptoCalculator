@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.haryo.cryptocalculator.R;
+import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 import com.haryo.cryptocalculator.modul.DataCrypto;
 import com.haryo.cryptocalculator.ui.MainActivity;
 
@@ -79,7 +80,23 @@ public class CoinHistoryAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent futurePos = new Intent(context, MainActivity.class);
                     futurePos.putExtra("pos",position);
-                    context.startActivity(futurePos);
+
+                    isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                        @Override
+                        public void onClose() {
+                            context.startActivity(futurePos);
+                        }
+
+                        @Override
+                        public void onShow() {
+                        }
+
+                        @Override
+                        public void onNotShow() {
+                            context.startActivity(futurePos);
+                        }
+                    });
+                    isAdsConfig.showInterst((Activity) context,false);
                 }
             });
         }

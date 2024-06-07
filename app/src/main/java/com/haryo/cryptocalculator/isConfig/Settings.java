@@ -7,6 +7,7 @@ public class Settings {
     public static Boolean REMOTE_ADS = false;
     public static final String URL_DATA = "";
     public static int INTERVAL = 0;
+    public static int LAMA_LOAD_ADS = 3;
     public static String STATUS = "0";
     public static String LINK = "https://play.google.com";
     public static String PESAN = "";

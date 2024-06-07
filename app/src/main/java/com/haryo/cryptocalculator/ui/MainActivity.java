@@ -1,5 +1,9 @@
 package com.haryo.cryptocalculator.ui;
 
+import static com.haryo.cryptocalculator.isConfig.isAdsConfig.nativeAd;
+import static com.haryo.cryptocalculator.isConfig.isAdsConfig.nativeAdLoader;
+import static com.haryo.cryptocalculator.isConfig.isAdsConfig.nativeAdMax;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,11 +55,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextInputEditText riskRewardText, posSizeCoinText, posSizeUsdtText, roeUsdtText, pnlUsdtText;
     RadioButton longSelect, shortSelect;
     RadioGroup barislima;
-    MaterialButton submitButton,resetButton;
+    MaterialButton submitButton, resetButton;
     SharedPreference sharedPref;
 
     int position = -1;
     Boolean isLong = true;
+    RelativeLayout adsBanner;
 
     @Override
     public void onSaveInstanceState(Bundle saveInsBundleState) {
@@ -102,13 +107,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         stopLoss = findViewById(R.id.stopLostText);
         leverage = findViewById(R.id.leverageText);
 
-        takeProfit.setFilters(new InputFilter[] { filter });
-        stopLoss.setFilters(new InputFilter[] { filter });
-        leverage.setFilters(new InputFilter[] { filter });
-        riskPercent.setFilters(new InputFilter[] { filter });
-        riskAmount.setFilters(new InputFilter[] { filter });
-        balance.setFilters(new InputFilter[] { filter });
-        entryPrice.setFilters(new InputFilter[] { filter });
+        takeProfit.setFilters(new InputFilter[]{filter});
+        stopLoss.setFilters(new InputFilter[]{filter});
+        leverage.setFilters(new InputFilter[]{filter});
+        riskPercent.setFilters(new InputFilter[]{filter});
+        riskAmount.setFilters(new InputFilter[]{filter});
+        balance.setFilters(new InputFilter[]{filter});
+        entryPrice.setFilters(new InputFilter[]{filter});
 
 
         riskRewardText = findViewById(R.id.riskReward);
@@ -149,8 +154,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         resultList.setVisibility(View.GONE);
         resetButton.setVisibility(View.GONE);
 
-        RelativeLayout adsBanner = findViewById(R.id.adsBanner);
-        isAdsConfig.callBanner(this, adsBanner);
+        adsBanner = findViewById(R.id.adsBanner);
+        isAdsConfig.loadInters(this, false);
+        isAdsConfig.callNative(this, adsBanner, R.layout.admob_native_big, R.layout.max_big_native);
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             leverageFloat = data.getLeverage();
 
 
-
             hitungPertama();
             hitungKedua(data.getLong());
             riskRewardText.setText(String.format(Locale.US, "%.8f", riskReward));
@@ -205,30 +210,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     || takeProfit.getText().toString().equals("") || stopLoss.getText().toString().equals("") || leverage.getText().toString().equals("")) {
                 Snackbar.make(findViewById(R.id.main_content), "Please fill the form", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.purple_700)).show();
             } else {
-                cekEntry();
-                hitungKedua(longSelect.isChecked());
+                isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                    @Override
+                    public void onClose() {
+                        proses();
+                    }
 
-                String coinNametext = coinName.getText().toString();
-                riskRewardText.setText(String.format(Locale.US, "%.8f", riskReward));
-                posSizeCoinText.setText(String.format(Locale.US, "%.8f", positionSizeCoin));
-                posSizeUsdtText.setText(String.format(Locale.US, "%.8f", posSizeUsdt));
+                    @Override
+                    public void onShow() {
+                    }
 
-                roeUsdtText.setText(String.format(Locale.US, "%.8f", roeFloat));
-                pnlUsdtText.setText(String.format(Locale.US, "%.8f", pnlUsdt));
-
-                DataCrypto developers = new DataCrypto(coinNametext, balanceFloat, riskPercentFloat
-                        , entryPriceFloat, stopLossFloat,
-                        takeProfitFloat, riskAmountFloat, leverageFloat, isLong, getDateNow());
-                sharedPref.addCoin(this, developers);
-
-
-                barislima.setVisibility(View.GONE);
-                submitButton.setVisibility(View.GONE);
-                resetButton.setVisibility(View.VISIBLE);
-
-                barisResult.setVisibility(View.VISIBLE);
-                resultList.setVisibility(View.VISIBLE);
-
+                    @Override
+                    public void onNotShow() {
+                        proses();
+                    }
+                });
+                isAdsConfig.showInterst(MainActivity.this,true);
             }
         });
 
@@ -288,6 +285,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    private void proses() {
+        cekEntry();
+        hitungKedua(longSelect.isChecked());
+        String coinNametext = coinName.getText().toString();
+        if (riskReward < 0) {
+            riskRewardText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+        }
+        if (positionSizeCoin < 0) {
+            posSizeCoinText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+        }
+        if (posSizeUsdt < 0) {
+            posSizeUsdtText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+        }
+        if (roeFloat < 0) {
+            roeUsdtText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+        }
+        if (pnlUsdt < 0) {
+            pnlUsdtText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+        }
+        riskRewardText.setText(String.format(Locale.US, "%.8f", riskReward));
+        posSizeCoinText.setText(String.format(Locale.US, "%.8f", positionSizeCoin));
+        posSizeUsdtText.setText(String.format(Locale.US, "%.8f", posSizeUsdt));
+
+        roeUsdtText.setText(String.format(Locale.US, "%.8f", roeFloat));
+        pnlUsdtText.setText(String.format(Locale.US, "%.8f", pnlUsdt));
+
+        DataCrypto developers = new DataCrypto(coinNametext, balanceFloat, riskPercentFloat
+                , entryPriceFloat, stopLossFloat,
+                takeProfitFloat, riskAmountFloat, leverageFloat, isLong, getDateNow());
+        sharedPref.addCoin(this, developers);
+
+
+        barislima.setVisibility(View.GONE);
+        submitButton.setVisibility(View.GONE);
+        resetButton.setVisibility(View.VISIBLE);
+
+        barisResult.setVisibility(View.VISIBLE);
+        resultList.setVisibility(View.VISIBLE);
+
+        isAdsConfig.clearBanner(adsBanner);
+        isAdsConfig.callBanner(MainActivity.this, adsBanner);
+
+    }
+
     private void clearAll() {
         coinName.getText().clear();
         balance.getText().clear();
@@ -296,6 +337,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         takeProfit.getText().clear();
         stopLoss.getText().clear();
         leverage.getText().clear();
+        isAdsConfig.clearBanner(adsBanner);
+        isAdsConfig.callNative(MainActivity.this, adsBanner, R.layout.admob_native_big, R.layout.max_big_native);
     }
 
     private void hitungKedua(boolean checked) {
@@ -356,41 +399,209 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Log.i("adslog", "onNavigationItemSelected: " + item.getItemId());
         switch (item.getItemId()) {
-            case R.id.fut_pos:
-                break;
             case R.id.spot_pos_size:
                 Intent spot = new Intent(MainActivity.this, SpotPosSizeActivity.class);
-                startActivity(spot);
+                isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                    @Override
+                    public void onClose() {
+                        startActivity(spot);
+                        finish();
+                    }
 
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onNotShow() {
+                        startActivity(spot);
+                        finish();
+                    }
+                });
+                isAdsConfig.showInterst(MainActivity.this, false);
                 break;
             case R.id.fut_pnl:
                 Intent fut = new Intent(MainActivity.this, FuturePnlActivity.class);
-                startActivity(fut);
+                isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                    @Override
+                    public void onClose() {
+
+                        startActivity(fut);
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onNotShow() {
+                        startActivity(fut);
+                        finish();
+                    }
+                });
+                isAdsConfig.showInterst(MainActivity.this, false);
                 break;
             case R.id.history:
                 Intent his = new Intent(MainActivity.this, CoinHistory.class);
-                startActivity(his);
-                finish();
+                isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                    @Override
+                    public void onClose() {
+                        startActivity(his);
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onNotShow() {
+                        startActivity(his);
+                        finish();
+                    }
+                });
+                isAdsConfig.showInterst(MainActivity.this, false);
                 break;
             case R.id.fut_target_price:
                 Intent ftp = new Intent(MainActivity.this, FutureTargPrice.class);
-                startActivity(ftp);
-                finish();
+
+                isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                    @Override
+                    public void onClose() {
+                        isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                            @Override
+                            public void onClose() {
+                                proses();
+                            }
+
+                            @Override
+                            public void onShow() {
+                            }
+
+                            @Override
+                            public void onNotShow() {
+                                proses();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onNotShow() {
+                        isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                            @Override
+                            public void onClose() {
+                                proses();
+                            }
+
+                            @Override
+                            public void onShow() {
+                            }
+
+                            @Override
+                            public void onNotShow() {
+                                proses();
+                            }
+                        });
+                    }
+                });
+                isAdsConfig.showInterst(MainActivity.this, false);
                 break;
-                case R.id.tips:
+            case R.id.tips:
                 Intent usage = new Intent(MainActivity.this, UsageActivity.class);
-                startActivity(usage);
-                finish();
+
+                isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                    @Override
+                    public void onClose() {
+                        isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                            @Override
+                            public void onClose() {
+                                proses();
+                            }
+
+                            @Override
+                            public void onShow() {
+                            }
+
+                            @Override
+                            public void onNotShow() {
+                                proses();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onNotShow() {
+                        isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                            @Override
+                            public void onClose() {
+                                proses();
+                            }
+
+                            @Override
+                            public void onShow() {
+                            }
+
+                            @Override
+                            public void onNotShow() {
+                                proses();
+                            }
+                        });
+                    }
+                });
+                isAdsConfig.showInterst(MainActivity.this, false);
                 break;
-                case R.id.spot_profit:
+            case R.id.spot_profit:
                 Intent spot_profit = new Intent(MainActivity.this, SpotProfitActivity.class);
-                startActivity(spot_profit);
-                finish();
+
+                isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                    @Override
+                    public void onClose() {
+                        startActivity(spot_profit);
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onNotShow() {
+                        startActivity(spot_profit);
+                        finish();
+                    }
+                });
+                isAdsConfig.showInterst(MainActivity.this, false);
                 break;
-                case R.id.spot_provit_price:
+            case R.id.spot_provit_price:
                 Intent spot_provit_price = new Intent(MainActivity.this, SpotProfitPriceActivity.class);
-                startActivity(spot_provit_price);
-                finish();
+
+                isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
+                    @Override
+                    public void onClose() {
+                        startActivity(spot_provit_price);
+                        finish();
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onNotShow() {
+                        startActivity(spot_provit_price);
+                        finish();
+                    }
+                });
+                isAdsConfig.showInterst(MainActivity.this, false);
                 break;
         }
 

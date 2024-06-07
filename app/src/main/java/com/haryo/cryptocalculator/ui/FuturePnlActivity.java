@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,13 +20,14 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.haryo.cryptocalculator.R;
+import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 
 public class FuturePnlActivity extends AppCompatActivity {
     TextInputEditText initialMargin, exitPrice, entryPrice, leverage, quantity, roe, pnl;
     MaterialButton calculate,refreshBtn;
     RadioButton longSelect, shortSelect;
     float leverageFloat, initMarginFloat, exitPriceFloat, entryPriceFloat, quantityFloat, roeFloat, pnlFloat;
-
+    RelativeLayout adsBanner;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,8 @@ public class FuturePnlActivity extends AppCompatActivity {
         roe = findViewById(R.id.roe);
         pnl = findViewById(R.id.pnl);
 
+        adsBanner = findViewById(R.id.adsBanner);
+        isAdsConfig.callBanner(this, adsBanner);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         try {

@@ -238,4 +238,14 @@
             android:enabled="false"
             android:hint="PNL USDT"/>
     </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/adsBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,13 +16,17 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
         isAdsConfig.initAds(this);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
                 gotoMain();
+            }
+        },1000);
     }
 
     private void gotoMain() {
-        Intent intent = new Intent(SplashActivity.this,  MainActivity.class);
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
