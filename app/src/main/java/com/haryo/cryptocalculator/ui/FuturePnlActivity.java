@@ -62,7 +62,7 @@ public class FuturePnlActivity extends AppCompatActivity {
                     || initialMargin.getText().toString().equals("") || leverage.getText().toString().equals("")) {
                 Snackbar.make(findViewById(R.id.main_content), "Please fill the form", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.purple_700)).show();
             } else {
-                cekEntry();
+                    cekEntry();
                 if (longSelect.isChecked()) {
                     quantity.setText(String.valueOf(quantityFloat));
                     roe.setText(String.valueOf(roeFloat));
@@ -116,13 +116,13 @@ public class FuturePnlActivity extends AppCompatActivity {
     }
 
     private void clearAll() {
-        entryPrice.setText("");
-        exitPrice.setText("");
-        initialMargin.setText("");
-        leverage.setText("");
-        quantity.setText("");
-        roe.setText("");
-        pnl.setText("");
+        entryPrice.getText().clear();
+        exitPrice.getText().clear();
+        initialMargin.getText().clear();
+        leverage.getText().clear();
+        quantity.getText().clear();
+        roe.getText().clear();
+        pnl.getText().clear();
     }
 
     private void cekEntry() {

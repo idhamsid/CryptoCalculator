@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
@@ -151,6 +152,8 @@
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_content_copy_24"
                     android:layout_weight="1"
                     android:hint="Entry Price">
 
@@ -167,6 +170,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_content_copy_24"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:hint="Take Profit">
@@ -196,6 +201,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_content_copy_24"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:hint="Stop Lost">
@@ -296,6 +303,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_content_copy_24"
                     android:layout_weight="1"
                     android:enabled="false"
                     android:hint="Position Size Coin">
@@ -311,6 +320,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/baseline_content_copy_24"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:enabled="false"
@@ -402,6 +413,19 @@
 
             </RadioGroup>
 
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/resetButton"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:backgroundTint="@color/bgButton"
+                android:text="RESET"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/resultList" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/submitButton"

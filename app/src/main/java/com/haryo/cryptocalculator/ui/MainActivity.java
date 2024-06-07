@@ -36,18 +36,18 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    TextInputEditText balance, riskAmount, entryPrice, stopLoss, leverage, riskPercent, takeProfit, coinName;
-    TextInputEditText riskRewardText, posSizeCoinText, posSizeUsdtText, roeUsdtText, pnlUsdtText;
     int percent = 0;
     int balanceInt = 0;
     int riskAmountInt = 0;
     MaterialButton btnSubmit;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    RadioButton longSelect, shortSelect;
     LinearLayout barisResult, resultList;
+    TextInputEditText balance, riskAmount, entryPrice, stopLoss, leverage, riskPercent, takeProfit, coinName;
+    TextInputEditText riskRewardText, posSizeCoinText, posSizeUsdtText, roeUsdtText, pnlUsdtText;
+    RadioButton longSelect, shortSelect;
     RadioGroup barislima;
-    MaterialButton submitButton;
+    MaterialButton submitButton,resetButton;
     SharedPreference sharedPref;
 
     int position = -1;
@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         longSelect = findViewById(R.id.longSelect);
         shortSelect = findViewById(R.id.shortSelect);
         btnSubmit = findViewById(R.id.submitButton);
+        resetButton = findViewById(R.id.resetButton);
 
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.main_content);
@@ -133,7 +134,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         barisResult.setVisibility(View.GONE);
         resultList.setVisibility(View.GONE);
+        resetButton.setVisibility(View.GONE);
 
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                barislima.setVisibility(View.VISIBLE);
+                submitButton.setVisibility(View.VISIBLE);
+
+                barisResult.setVisibility(View.GONE);
+                resultList.setVisibility(View.GONE);
+                resetButton.setVisibility(View.GONE);
+                clearAll();
+            }
+        });
         if (dataCrypto != null) {
             DataCrypto data = sharedPref.getCoins(this).get(position);
             coinName.setText(new String(data.getCoinName()));
@@ -146,9 +161,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             barislima.setVisibility(View.GONE);
             submitButton.setVisibility(View.GONE);
+            resetButton.setVisibility(View.VISIBLE);
 
             barisResult.setVisibility(View.VISIBLE);
             resultList.setVisibility(View.VISIBLE);
+
+            balanceFloat = data.getBalance();
+            riskPercentFloat = data.getRiskpercent();
+            riskAmountFloat = data.getRiskAmount();
+            entryPriceFloat = data.getEntryPrice();
+            takeProfitFloat = data.getTakeProfit();
+            stopLossFloat = data.getStopLost();
+            leverageFloat = data.getLeverage();
+
+
 
             hitungPertama();
             hitungKedua(data.getLong());
@@ -195,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 barislima.setVisibility(View.GONE);
                 submitButton.setVisibility(View.GONE);
+                resetButton.setVisibility(View.VISIBLE);
 
                 barisResult.setVisibility(View.VISIBLE);
                 resultList.setVisibility(View.VISIBLE);
@@ -256,6 +283,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+    }
+
+    private void clearAll() {
+        coinName.getText().clear();
+        balance.getText().clear();
+        riskPercent.getText().clear();
+        entryPrice.getText().clear();
+        takeProfit.getText().clear();
+        stopLoss.getText().clear();
+        leverage.getText().clear();
     }
 
     private void hitungKedua(boolean checked) {
@@ -332,7 +369,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(his);
                 finish();
                 break;
+            case R.id.fut_target_price:
+                Intent ftp = new Intent(MainActivity.this, FutureTargPrice.class);
+                startActivity(ftp);
+                finish();
+                break;
+                case R.id.tips:
+                Intent usage = new Intent(MainActivity.this, UsageActivity.class);
+                startActivity(usage);
+                finish();
+                break;
         }
+
         drawerLayout.closeDrawer(GravityCompat.START);
 
         return true;

@@ -27,6 +27,7 @@
             android:name=".ui.CoinHistory"
             android:noHistory="true" />
         <activity android:name=".ui.FuturePnlActivity" />
+        <activity android:name=".ui.FutureTargPrice" />
         <activity android:name=".ui.SpotPosSizeActivity" />
         <activity
             android:name=".ui.MainActivity" />

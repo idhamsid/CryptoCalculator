@@ -41,7 +41,7 @@ public class UsageActivity extends AppCompatActivity{
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayShowTitleEnabled(true);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setTitle("Future Position Size");
+                getSupportActionBar().setTitle("Usage Tips");
             }
         } catch (Exception e) {
             Log.i("adslog", "exception : " + e.getMessage());
