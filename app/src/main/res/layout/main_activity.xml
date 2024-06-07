@@ -152,10 +152,10 @@
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/baseline_content_copy_24"
                     android:layout_weight="1"
-                    android:hint="Entry Price">
+                    android:hint="Entry Price"
+                    app:endIconDrawable="@drawable/baseline_content_copy_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/entryPriceText"
@@ -170,11 +170,11 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/baseline_content_copy_24"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:hint="Take Profit">
+                    android:hint="Take Profit"
+                    app:endIconDrawable="@drawable/baseline_content_copy_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/takeProfitText"
@@ -201,11 +201,11 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/baseline_content_copy_24"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:hint="Stop Lost">
+                    android:hint="Stop Lost"
+                    app:endIconDrawable="@drawable/baseline_content_copy_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/stopLostText"
@@ -276,7 +276,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/barisResult">
@@ -303,11 +303,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/baseline_content_copy_24"
                     android:layout_weight="1"
                     android:enabled="false"
-                    android:hint="Position Size Coin">
+                    android:hint="Position Size Coin"
+                    app:endIconDrawable="@drawable/baseline_content_copy_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/posSizeCoin"
@@ -320,12 +320,12 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/baseline_content_copy_24"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:enabled="false"
-                    android:hint="Position Size USDT">
+                    android:hint="Position Size USDT"
+                    app:endIconDrawable="@drawable/baseline_content_copy_24"
+                    app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/posSizeUsdt"
@@ -374,7 +374,7 @@
                 android:layout_marginEnd="15dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/barisempat">
@@ -413,7 +413,6 @@
 
             </RadioGroup>
 
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/resetButton"
                 android:layout_width="0dp"
@@ -440,8 +439,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/barislima" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+    <RelativeLayout
+        android:id="@+id/adsBanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 </LinearLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

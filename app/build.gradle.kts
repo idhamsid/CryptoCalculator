@@ -32,11 +32,15 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(libs.gson)
+    implementation(libs.admob)
+    implementation(libs.applovin)
+    implementation(libs.applovin.facebook)
+    implementation(libs.applovin.google)
+    implementation(libs.google.identifier)
 }

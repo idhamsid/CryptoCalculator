@@ -39,10 +39,10 @@
                     android:iconTint="@color/black"
                     android:title="Spot Position Size" />
                 <item
-                    android:id="@+id/spot_pnl"
+                    android:id="@+id/spot_provit_price"
                     android:icon="@drawable/baseline_arrow_circle_right_24"
                     android:iconTint="@color/black"
-                    android:title="Spot PNL" />
+                    android:title="Spot Profit Price" />
                 <item
                     android:id="@+id/spot_profit"
                     android:icon="@drawable/baseline_arrow_circle_right_24"

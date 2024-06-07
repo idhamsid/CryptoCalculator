@@ -30,8 +30,25 @@
         <activity android:name=".ui.FutureTargPrice" />
         <activity android:name=".ui.SpotPosSizeActivity" />
         <activity android:name=".ui.SpotProfitActivity" />
+        <activity android:name=".ui.SpotProfitPriceActivity" />
         <activity android:name=".ui.MainActivity" />
         <activity android:name=".ui.UsageActivity" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"
+            android:value="true"/>
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
+            android:value="true"/>
+
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admobappid" />
+        <meta-data
+            android:name="applovin.sdk.key"
+            android:value="@string/sdk_key_applovin" />
+
     </application>
 
 </manifest>

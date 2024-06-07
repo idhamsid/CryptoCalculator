@@ -6,6 +6,11 @@ espressoCore = "3.5.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 gson = "2.10.1"
+admob = "23.1.0"
+applovin = "12.5.0"
+appFan = "6.17.0.0"
+appAdmob = "23.1.0.0"
+identifier = "18.1.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -13,7 +18,13 @@ ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitV
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-gson = {group = "com.google.code.gson",name = "gson", version.ref = "gson"  }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+admob = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "admob" }
+applovin = { group = "com.applovin", name = "applovin-sdk", version.ref = "applovin" }
+applovin-facebook = { group = "com.applovin.mediation", name = "facebook-adapter", version.ref = "appFan" }
+applovin-google = { group = "com.applovin.mediation", name = "google-adapter", version.ref = "appAdmob" }
+google-identifier = {group = "com.google.android.gms", name="play-services-ads-identifier",version.ref="identifier"}
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

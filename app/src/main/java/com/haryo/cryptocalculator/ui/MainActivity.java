@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.haryo.cryptocalculator.R;
 import com.haryo.cryptocalculator.isConfig.SharedPreference;
+import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 import com.haryo.cryptocalculator.modul.DataCrypto;
 
 import java.text.SimpleDateFormat;
@@ -67,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.main_activity);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         sharedPref = new SharedPreference();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -147,7 +149,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         resultList.setVisibility(View.GONE);
         resetButton.setVisibility(View.GONE);
 
-
+        RelativeLayout adsBanner = findViewById(R.id.adsBanner);
+        isAdsConfig.callBanner(this, adsBanner);
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -382,6 +385,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.spot_profit:
                 Intent spot_profit = new Intent(MainActivity.this, SpotProfitActivity.class);
                 startActivity(spot_profit);
+                finish();
+                break;
+                case R.id.spot_provit_price:
+                Intent spot_provit_price = new Intent(MainActivity.this, SpotProfitPriceActivity.class);
+                startActivity(spot_provit_price);
                 finish();
                 break;
         }

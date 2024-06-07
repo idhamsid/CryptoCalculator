@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Crypto Calculator</string>
 
+    <string name="sdk_key_applovin">oIyaDDvAwkWEZqldZSsfrVaCMOv4Ra-FeTBoMOkaAXtWkvEqIsZC445A-_-yoxrIAi9fKTkp9nQ7l-qNL9wwHg</string>
+    <string name="admobappid">ca-app-pub-3940256099942544~3347511713</string>
 
     <string name="material_drawer_open">Open</string>
     <string name="material_drawer_close">Close</string>
