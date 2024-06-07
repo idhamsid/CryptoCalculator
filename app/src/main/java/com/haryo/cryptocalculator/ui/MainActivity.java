@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
@@ -97,6 +99,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         takeProfit = findViewById(R.id.takeProfitText);
         stopLoss = findViewById(R.id.stopLostText);
         leverage = findViewById(R.id.leverageText);
+
+        takeProfit.setFilters(new InputFilter[] { filter });
+        stopLoss.setFilters(new InputFilter[] { filter });
+        leverage.setFilters(new InputFilter[] { filter });
+        riskPercent.setFilters(new InputFilter[] { filter });
+        riskAmount.setFilters(new InputFilter[] { filter });
+        balance.setFilters(new InputFilter[] { filter });
+        entryPrice.setFilters(new InputFilter[] { filter });
+
 
         riskRewardText = findViewById(R.id.riskReward);
         posSizeCoinText = findViewById(R.id.posSizeCoin);
@@ -192,17 +203,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Snackbar.make(findViewById(R.id.main_content), "Please fill the form", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.purple_700)).show();
             } else {
                 cekEntry();
-
-//                if (longSelect.isChecked()) {
-//                    roeFloat = ((takeProfitFloat - entryPriceFloat) / (entryPriceFloat) * 100 * leverageFloat);
-//                    pnlUsdt = (posSizeUsdt * roeFloat) / 100;
-//                    isLong = true;
-//                } else {
-//                    roeFloat = ((takeProfitFloat - entryPriceFloat) / (entryPriceFloat) * 100 * leverageFloat * -1);
-//                    pnlUsdt = (posSizeUsdt * roeFloat) / 100;
-//                    isLong = false;
-//                }
-
                 hitungKedua(longSelect.isChecked());
 
                 String coinNametext = coinName.getText().toString();
@@ -379,6 +379,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(usage);
                 finish();
                 break;
+                case R.id.spot_profit:
+                Intent spot_profit = new Intent(MainActivity.this, SpotProfitActivity.class);
+                startActivity(spot_profit);
+                finish();
+                break;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -387,4 +392,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    InputFilter filter = new InputFilter() {
+        public CharSequence filter(CharSequence source, int start, int end,
+                                   Spanned dest, int dstart, int dend) {
+            for (int i = start; i < end; i++) {
+                if (!Character.isDigit(source.charAt(i))) {
+                    return "";
+                }
+            }
+            return null;
+        }
+    };
 }

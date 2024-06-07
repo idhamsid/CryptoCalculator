@@ -2,6 +2,8 @@ package com.haryo.cryptocalculator.ui;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
@@ -34,6 +36,12 @@ public class FuturePnlActivity extends AppCompatActivity {
         exitPrice = findViewById(R.id.exitPrice);
         initialMargin = findViewById(R.id.initialMargin);
         leverage = findViewById(R.id.leverage);
+
+        entryPrice.setFilters(new InputFilter[] { filter });
+        exitPrice.setFilters(new InputFilter[] { filter });
+        initialMargin.setFilters(new InputFilter[] { filter });
+        leverage.setFilters(new InputFilter[] { filter });
+
         longSelect = findViewById(R.id.longSelect);
         shortSelect = findViewById(R.id.shortSelect);
         calculate = findViewById(R.id.submitButton);
@@ -125,6 +133,17 @@ public class FuturePnlActivity extends AppCompatActivity {
         pnl.getText().clear();
     }
 
+    InputFilter filter = new InputFilter() {
+        public CharSequence filter(CharSequence source, int start, int end,
+                                   Spanned dest, int dstart, int dend) {
+            for (int i = start; i < end; i++) {
+                if (!Character.isDigit(source.charAt(i))) {
+                    return "";
+                }
+            }
+            return null;
+        }
+    };
     private void cekEntry() {
         String leverageText = leverage.getText().toString();
         leverageFloat = Float.parseFloat(leverageText);
