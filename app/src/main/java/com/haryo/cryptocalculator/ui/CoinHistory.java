@@ -50,7 +50,6 @@ public class CoinHistory extends AppCompatActivity {
         isAdsConfig.callBanner(this,adsBanner);
         isAdsConfig.loadInters(this,false);
         coinLists = sharedPref.getCoins(this);
-        Log.i("adslog", "onCreate: coin list size " + coinLists.size());
         adapter = new CoinHistoryAdapter(coinLists,CoinHistory.this);
         recCoinHistory.setAdapter(adapter);
     }

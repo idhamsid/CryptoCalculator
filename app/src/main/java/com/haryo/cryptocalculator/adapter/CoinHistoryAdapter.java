@@ -20,6 +20,7 @@ import com.haryo.cryptocalculator.R;
 import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 import com.haryo.cryptocalculator.modul.DataCrypto;
 import com.haryo.cryptocalculator.ui.MainActivity;
+import com.haryo.cryptocalculator.ui.SpotPosSizeActivity;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,6 @@ public class CoinHistoryAdapter extends RecyclerView.Adapter {
     static ArrayList<DataCrypto> coinLists;
     public Context context;
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public MaterialButton buttonFuturePos;
         public MaterialButton buttonDetail;
         public TextView coinName;
         public TextView entryPrice;
@@ -36,13 +36,14 @@ public class CoinHistoryAdapter extends RecyclerView.Adapter {
         public TextView takeProfit;
         public TextView riskAmount;
         public TextView dateSubmit;
+        public TextView textPos;
         public ViewHolder(View itemView) {
             super(itemView);
-            buttonFuturePos = itemView.findViewById(R.id.button);
             buttonDetail = itemView.findViewById(R.id.buttonDetail);
 
             coinName = itemView.findViewById(R.id.coinName);
             entryPrice = itemView.findViewById(R.id.entryPrice);
+            textPos = itemView.findViewById(R.id.textPos);
             stopLoss = itemView.findViewById(R.id.stopLoss);
             takeProfit = itemView.findViewById(R.id.takeProfit);
             riskAmount = itemView.findViewById(R.id.riskAmount);
@@ -76,13 +77,19 @@ public class CoinHistoryAdapter extends RecyclerView.Adapter {
             ((ViewHolder) holder).takeProfit.setText("Take profit : "+String.valueOf(itemList.getTakeProfit()));
             ((ViewHolder) holder).riskAmount.setText("Risk amount : "+String.valueOf(itemList.getRiskAmount()));
             ((ViewHolder) holder).dateSubmit.setText("Entry date : "+itemList.getEntriDate());
+            ((ViewHolder) holder).textPos.setText(itemList.getPosition());
 
             ((ViewHolder) holder).buttonDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent futurePos = new Intent(context, MainActivity.class);
-                    futurePos.putExtra("pos",position);
-
+                    Intent futurePos;
+                    if(itemList.getPosition().equals("Future Position")){
+                        futurePos = new Intent(context, MainActivity.class);
+                        futurePos.putExtra("pos",position);
+                    } else {
+                        futurePos = new Intent(context, SpotPosSizeActivity.class);
+                        futurePos.putExtra("pos", position);
+                    }
                     isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
                         @Override
                         public void onClose() {
@@ -92,7 +99,6 @@ public class CoinHistoryAdapter extends RecyclerView.Adapter {
                         @Override
                         public void onShow() {
                         }
-
                         @Override
                         public void onNotShow() {
                             context.startActivity(futurePos);
@@ -106,6 +112,6 @@ public class CoinHistoryAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return coinLists.size();
+        return coinLists == null ? 0 : coinLists.size();
     }
 }

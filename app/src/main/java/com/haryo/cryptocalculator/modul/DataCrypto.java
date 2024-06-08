@@ -14,6 +14,17 @@ public class DataCrypto {
     float Leverage;
     Boolean isLong;
     String EntriDate;
+
+
+    String position;
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
     public Boolean getLong() {
         return isLong;
     }
@@ -46,7 +57,7 @@ public class DataCrypto {
     }
 
     public DataCrypto(String coinName, float balance, float riskpercent, float entryPrice,
-                      float stopLost, float takeProfit, float riskAmount, float leverage,Boolean isLong, String entriDate) {
+                      float stopLost, float takeProfit, float riskAmount, float leverage,Boolean isLong, String entriDate,String position) {
         CoinName = coinName;
         Balance = balance;
         Riskpercent = riskpercent;
@@ -57,6 +68,7 @@ public class DataCrypto {
         Leverage = leverage;
         this.isLong = isLong;
         EntriDate = entriDate;
+        this.position = position;
     }
 
     public void setCoinName(String coinName) {

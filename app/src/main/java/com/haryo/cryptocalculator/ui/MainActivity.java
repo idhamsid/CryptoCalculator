@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     LinearLayout barisResult, resultList;
     TextInputEditText balance, riskAmount, entryPrice, stopLoss, leverage, riskPercent, takeProfit, coinName;
-    TextInputLayout entryPriceLay,takeProfitLay,stopLost,posSizeCoinName,posSizeUsdtName;
+    TextInputLayout entryPriceLay, takeProfitLay, stopLost, posSizeCoinName, posSizeUsdtName;
     TextInputEditText riskRewardText, posSizeCoinText, posSizeUsdtText, roeUsdtText, pnlUsdtText;
     RadioButton longSelect, shortSelect;
     RadioGroup barislima;
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 finish();
             }
         });
-        isAdsConfig.callNative(MainActivity.this,dialog.findViewById(R.id.layAds),R.layout.admob_native_big,R.layout.max_big_native);
+        isAdsConfig.callNative(MainActivity.this, dialog.findViewById(R.id.layAds), R.layout.admob_native_big, R.layout.max_big_native);
         Button open = dialog.findViewById(R.id.tbRate);
         open.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         leverage = findViewById(R.id.leverageText);
 
 
-
         riskRewardText = findViewById(R.id.riskReward);
         posSizeCoinText = findViewById(R.id.posSizeCoin);
         posSizeUsdtText = findViewById(R.id.posSizeUsdt);
@@ -165,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         longSelect = findViewById(R.id.longSelect);
         shortSelect = findViewById(R.id.shortSelect);
-        btnSubmit = findViewById(R.id.submitButton);
         resetButton = findViewById(R.id.resetButton);
 
         navigationView = findViewById(R.id.nav_view);
@@ -300,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             pnlUsdtText.setText(String.format(Locale.US, "%.8f", pnlUsdt));
 
         }
-        btnSubmit.setOnClickListener(v -> {
+        submitButton.setOnClickListener(v -> {
             if (balance.getText().toString().equals("") || riskPercent.getText().toString().equals("") || entryPrice.getText().toString().equals("")
                     || takeProfit.getText().toString().equals("") || stopLoss.getText().toString().equals("") || leverage.getText().toString().equals("")) {
                 Snackbar.make(findViewById(R.id.main_content), "Please fill the form", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.purple_700)).show();
@@ -405,7 +403,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         DataCrypto developers = new DataCrypto(coinNametext, balanceFloat, riskPercentFloat
                 , entryPriceFloat, stopLossFloat,
-                takeProfitFloat, riskAmountFloat, leverageFloat, isLong, getDateNow());
+                takeProfitFloat, riskAmountFloat, leverageFloat, isLong, getDateNow(),"Future Position");
         sharedPref.addCoin(this, developers);
 
 
@@ -593,11 +591,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.about:
                 showAbout();
                 break;
+            case R.id.share:
+                share();
+                break;
         }
-
         drawerLayout.closeDrawer(GravityCompat.START);
-
         return true;
+    }
+
+    private void share() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + "\n" + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID);
+        intent.setType("text/plain");
+        startActivity(intent);
     }
 
     private void showAbout() {

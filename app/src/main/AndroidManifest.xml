@@ -6,11 +6,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".ui.CryptoCalc"
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
+        android:largeHeap="true"
         android:label="@string/app_name"
+        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme"
@@ -26,14 +27,22 @@
         </activity>
         <activity
             android:name=".ui.CoinHistory"
+            android:windowSoftInputMode="adjustPan"
             android:noHistory="true" />
-        <activity android:name=".ui.FuturePnlActivity" />
-        <activity android:name=".ui.FutureTargPrice" />
-        <activity android:name=".ui.SpotPosSizeActivity" />
-        <activity android:name=".ui.SpotProfitActivity" />
-        <activity android:name=".ui.SpotProfitPriceActivity" />
-        <activity android:name=".ui.MainActivity" />
-        <activity android:name=".ui.UsageActivity" />
+        <activity android:name=".ui.FuturePnlActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ui.FutureTargPrice"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ui.SpotPosSizeActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ui.SpotProfitActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.SpotProfitPriceActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ui.MainActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.UsageActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
         <meta-data
             android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"
@@ -41,7 +50,6 @@
         <meta-data
             android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
             android:value="true"/>
-
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

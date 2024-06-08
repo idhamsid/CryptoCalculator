@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,7 +26,14 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.haryo.cryptocalculator.R;
+import com.haryo.cryptocalculator.isConfig.SharedPreference;
 import com.haryo.cryptocalculator.isConfig.isAdsConfig;
+import com.haryo.cryptocalculator.modul.DataCrypto;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class SpotPosSizeActivity extends AppCompatActivity {
     TextInputEditText balance, riskAmount, entryPrice, stopLoss,
@@ -41,11 +49,35 @@ public class SpotPosSizeActivity extends AppCompatActivity {
 
     RelativeLayout adsBanner;
     TextInputLayout entryPriceLay,takeProfit,stopLostLay,posSizeCoinName,posSizeUsdtName;
+    SharedPreference sharedPref;
+    int position = -1;
+    DataCrypto dataCrypto;
+    @Override
+    public void onSaveInstanceState(Bundle saveInsBundleState) {
+        super.onSaveInstanceState(saveInsBundleState);
+        saveInsBundleState.putInt("pos", position);
+
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.spot_pos_activity);
+        sharedPref = new SharedPreference();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            position = extras.getInt("pos");
+            dataCrypto = sharedPref.getCoins(this).get(position);
+        } else {
+            if (savedInstanceState != null) {
+                position = savedInstanceState.getInt("pos");
+                Log.i("adslog", "onCreate: pos " + position);
+            } else {
+                dataCrypto = null;
+                position = -1;
+            }
+        }
+
+
         coinNameText = findViewById(R.id.coinNameText);
         balance = findViewById(R.id.balanceText);
         riskPercent = findViewById(R.id.riskPercentText);
@@ -83,7 +115,77 @@ public class SpotPosSizeActivity extends AppCompatActivity {
         isAdsConfig.loadInters(this, false);
         isAdsConfig.callBanner(SpotPosSizeActivity.this, adsBanner);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        if (dataCrypto != null) {
+            DataCrypto data = sharedPref.getCoins(this).get(position);
+            coinNameText.setText(new String(data.getCoinName()));
+            balance.setText(new String(String.valueOf(data.getBalance())));
+            riskPercent.setText(new String(String.valueOf(data.getRiskpercent())));
+            entryPrice.setText(new String(String.valueOf(data.getEntryPrice())));
+            takeProfitText.setText(new String(String.valueOf(data.getTakeProfit())));
+            stopLoss.setText(new String(String.valueOf(data.getStopLost())));
+            feeText.setText(new String(String.valueOf(data.getLeverage())));
 
+            btnSubmit.setVisibility(View.GONE);
+            resetButton.setVisibility(View.VISIBLE);
+
+            barisResult.setVisibility(View.VISIBLE);
+            resultList.setVisibility(View.VISIBLE);
+
+            balanceFloat = data.getBalance();
+            riskPercentFloat = data.getRiskpercent();
+            riskAmountFloat = data.getRiskAmount();
+            entryPriceFloat = data.getEntryPrice();
+            takeProfitFloat = data.getTakeProfit();
+            stopLossFloat = data.getStopLost();
+            feeFloat = data.getLeverage();
+
+            if (feeText.getText().toString().equals("")) {
+                feeFloat = 0;
+            } else {
+                feeFloat = Float.parseFloat(feeText.getText().toString());
+            }
+
+
+            riskRewardFloat = (takeProfitFloat - entryPriceFloat) / (entryPriceFloat - stopLossFloat);
+            aFloat = (1 * ((riskAmountFloat * entryPriceFloat) / (1 * (stopLossFloat)))) * -1;
+            posSizeFloat = aFloat - (aFloat * feeFloat);
+            positionSizeUSDT = entryPriceFloat * posSizeFloat;
+            roeFloat = ((takeProfitFloat - entryPriceFloat) / entryPriceFloat) * 100;
+            pnlUSDT = (positionSizeUSDT * roeFloat) / 100;
+
+            if (riskRewardFloat < 0) {
+                riskReward.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+            }
+            if (posSizeFloat < 0) {
+                posSizeCoin.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+            }
+            if (positionSizeUSDT < 0) {
+                posSizeUsdt.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+            }
+            if (roeFloat < 0) {
+                roeUsdt.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+            }
+            if (pnlUSDT < 0) {
+                pnlUsdt.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+            }
+
+
+            riskReward.setText(String.format(Locale.US, "%.8f",riskRewardFloat));
+            posSizeCoin.setText(String.format(Locale.US, "%.8f",posSizeFloat));
+            posSizeUsdt.setText(String.format(Locale.US, "%.8f",positionSizeUSDT));
+            roeUsdt.setText(String.format(Locale.US, "%.8f",roeFloat));
+            pnlUsdt.setText(String.format(Locale.US, "%.8f",pnlUSDT));
+
+//            hitungPertama();
+//            hitungKedua(data.getLong());
+//            riskRewardText.setText(String.format(Locale.US, "%.8f", riskReward));
+//            posSizeCoinText.setText(String.format(Locale.US, "%.8f", positionSizeCoin));
+//            posSizeUsdtText.setText(String.format(Locale.US, "%.8f", posSizeUsdt));
+//
+//            roeUsdtText.setText(String.format(Locale.US, "%.8f", roeFloat));
+//            pnlUsdtText.setText(String.format(Locale.US, "%.8f", pnlUsdt));
+
+        }
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         entryPriceLay.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,11 +239,12 @@ public class SpotPosSizeActivity extends AppCompatActivity {
                 resetButton.setVisibility(View.GONE);
                 btnSubmit.setVisibility(View.VISIBLE);
 
-                balance.setText("");
-                riskPercent.setText("");
-                riskAmount.setText("");
-                entryPrice.setText("");
-                stopLoss.setText("");
+                coinNameText.getText().clear();
+                balance.getText().clear();
+                riskPercent.getText().clear();
+                riskAmount.getText().clear();
+                entryPrice.getText().clear();
+                stopLoss.getText().clear();
             }
         });
         btnSubmit.setOnClickListener(v -> {
@@ -232,6 +335,7 @@ public class SpotPosSizeActivity extends AppCompatActivity {
         resetButton.setVisibility(View.VISIBLE);
         btnSubmit.setVisibility(View.GONE);
 
+        String coinNametext = coinNameText.getText().toString();
         balanceFloat = Float.parseFloat(balance.getText().toString());
         riskPercentFloat = Float.parseFloat(riskPercent.getText().toString());
         riskAmountFloat = Float.parseFloat(riskAmount.getText().toString());
@@ -274,8 +378,22 @@ public class SpotPosSizeActivity extends AppCompatActivity {
         pnlUsdt.setText(String.valueOf(pnlUSDT));
 
 
-    }
 
+        DataCrypto developers = new DataCrypto(coinNametext, balanceFloat, riskPercentFloat
+                , entryPriceFloat, stopLossFloat,
+                takeProfitFloat, riskAmountFloat, feeFloat, false, getDateNow(),"Spot Position");
+        sharedPref.addCoin(this, developers);
+
+
+    }
+    private String getDateNow() {
+        Date c = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + c);
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String formattedDate = df.format(c);
+        return formattedDate;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

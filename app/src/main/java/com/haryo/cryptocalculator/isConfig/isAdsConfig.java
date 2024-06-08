@@ -1,20 +1,19 @@
 package com.haryo.cryptocalculator.isConfig;
 
-
 import static com.haryo.cryptocalculator.isConfig.Settings.BANNER;
 import static com.haryo.cryptocalculator.isConfig.Settings.COUNTER;
 import static com.haryo.cryptocalculator.isConfig.Settings.INTER;
 import static com.haryo.cryptocalculator.isConfig.Settings.INTERVAL;
-import static com.haryo.cryptocalculator.isConfig.Settings.LAMA_LOAD_ADS;
 import static com.haryo.cryptocalculator.isConfig.Settings.MAX_BANNER;
 import static com.haryo.cryptocalculator.isConfig.Settings.MAX_INTERST;
 import static com.haryo.cryptocalculator.isConfig.Settings.MAX_NATIV;
-import static com.haryo.cryptocalculator.isConfig.Settings.MAX_REWARD;
 import static com.haryo.cryptocalculator.isConfig.Settings.NATIV;
-import static com.haryo.cryptocalculator.isConfig.Settings.REWARD_VIDEO;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -141,6 +140,10 @@ public class isAdsConfig {
 
     public static void showInterst(Activity activity,Boolean showLoadDialog,Integer lamaLoad) {
         if (COUNTER >= INTERVAL) {
+            if(!checkConnectivity(activity)){
+                isListener.onNotShow();
+                return;
+            }
             if (showLoadDialog) {
                 showDialog(activity);
                 dialog.show();
@@ -249,72 +252,6 @@ public class isAdsConfig {
         rListener = listener;
     }
 
-    public static MaxRewardedAd rewardedAd;
-    public static RewardedAd mRewardedAd;
-    public static boolean unlockreward = false;
-
-    public static void loadReward(Activity activity, Boolean showReward) {
-
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-        RewardedAd.load(activity, REWARD_VIDEO,
-                adRequest, new RewardedAdLoadCallback() {
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        mRewardedAd = null;
-                        Log.i("adslogh", "onAdFailedToLoad: loaderror " + loadAdError.getMessage());
-                    }
-
-                    @Override
-                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
-                        mRewardedAd = rewardedAd;
-                        Log.i("adslogh", "onAdFailedToLoad: loaderror " + rewardedAd.getRewardItem());
-                    }
-                });
-
-        rewardedAd = MaxRewardedAd.getInstance(MAX_REWARD, activity);
-        rewardedAd.loadAd();
-        if (showReward) {
-            if (mRewardedAd != null) {
-                Activity activityContext = activity;
-                mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
-                    @Override
-                    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                        unlockreward = true;
-
-                        loadReward(activity, false);
-                    }
-                });
-            } else {
-                if (rewardedAd.isReady()) {
-                    rewardedAd.showAd();
-                }
-                loadReward(activity, false);
-            }
-        }
-    }
-
-    public static void showReward(Activity activity ) {
-        if (mRewardedAd != null) {
-            Activity activityContext = activity;
-            mRewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                @Override
-                public void onAdDismissedFullScreenContent() {
-                    super.onAdDismissedFullScreenContent();
-                    if (unlockreward) {
-                        rListener.onRewarded();
-                    }
-                }
-            });
-            mRewardedAd.show(activityContext, rewardItem -> unlockreward = true);
-        } else {
-            if (rewardedAd.isReady()) {
-                rewardedAd.showAd();
-                rewardedAd.loadAd();
-            }
-        }
-        loadReward(activity, false);
-    }
 
     public static NativeAd nativeAd;
     public static MaxAd nativeAdMax;
@@ -581,5 +518,9 @@ public class isAdsConfig {
         int adWidth = (int) (widthPixels / density);
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth);
     }
-
+    public static boolean checkConnectivity(Activity activity) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+        return info != null && info.isConnected() && info.isAvailable();
+    }
 }

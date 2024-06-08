@@ -9,4 +9,6 @@
     <string name="message_about">Bisa di rubah di dalam string</string>
     <string name="confirm_exit_">Thank you for using this app, please support us by giving a review or sharing the app.</string>
     <string name="confirm_exit">Exit Application!</string>
+    <string name="share_text">I Would like to share this with you. Here You Can Download This Application from PlayStore</string>
+
 </resources>

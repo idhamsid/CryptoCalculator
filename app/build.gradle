@@ -36,6 +36,7 @@ android {
 dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation (libs.volley)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -45,4 +46,5 @@ dependencies {
     implementation(libs.applovin.facebook)
     implementation(libs.applovin.google)
     implementation(libs.google.identifier)
+    implementation(libs.openads)
 }

@@ -11,6 +11,8 @@ applovin = "12.5.0"
 appFan = "6.17.0.0"
 appAdmob = "23.1.0.0"
 identifier = "18.1.0"
+openads="2.6.4"
+volley = "1.2.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -24,7 +26,8 @@ applovin = { group = "com.applovin", name = "applovin-sdk", version.ref = "applo
 applovin-facebook = { group = "com.applovin.mediation", name = "facebook-adapter", version.ref = "appFan" }
 applovin-google = { group = "com.applovin.mediation", name = "google-adapter", version.ref = "appAdmob" }
 google-identifier = {group = "com.google.android.gms", name="play-services-ads-identifier",version.ref="identifier"}
-
+openads = {group="com.lazygeniouz",name="aoa_manager",version.ref="openads"}
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
