@@ -14,11 +14,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.ContactsContract;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
@@ -37,7 +33,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -59,9 +54,9 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    int percent = 0;
-    int balanceInt = 0;
-    int riskAmountInt = 0;
+    float percent = 0;
+    float balanceInt = 0;
+    float riskAmountInt = 0;
     MaterialButton btnSubmit;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -139,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (savedInstanceState != null) {
                 position = savedInstanceState.getInt("pos");
                 Log.i("adslog", "onCreate: pos " + position);
-//                dataCrypto = sharedPref.getCoins(this).get(position);
             } else {
                 dataCrypto = null;
                 position = -1;
@@ -161,13 +155,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         stopLoss = findViewById(R.id.stopLostText);
         leverage = findViewById(R.id.leverageText);
 
-        takeProfit.setFilters(new InputFilter[]{filter});
-        stopLoss.setFilters(new InputFilter[]{filter});
-        leverage.setFilters(new InputFilter[]{filter});
-        riskPercent.setFilters(new InputFilter[]{filter});
-        riskAmount.setFilters(new InputFilter[]{filter});
-        balance.setFilters(new InputFilter[]{filter});
-        entryPrice.setFilters(new InputFilter[]{filter});
 
 
         riskRewardText = findViewById(R.id.riskReward);
@@ -210,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         adsBanner = findViewById(R.id.adsBanner);
         isAdsConfig.loadInters(this, false);
-        isAdsConfig.callNative(this, adsBanner, R.layout.admob_native_big, R.layout.max_big_native);
+        isAdsConfig.callBanner(MainActivity.this, adsBanner);
 
 
         entryPriceLay = findViewById(R.id.entryPrice);
@@ -336,8 +323,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
             }
         });
-
-
         balance.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -350,13 +335,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             @Override
-
             public void afterTextChanged(Editable s) {
                 String str = new String(s.toString());
                 if (str.equals(""))
                     balanceInt = 0;
                 else
-                    balanceInt = Integer.parseInt(new String(s.toString()));
+                    balanceInt = Float.parseFloat(new String(s.toString()));
                 if (percent != 0) {
                     riskAmountInt = balanceInt * percent / 100;
                     riskAmount.setText(String.valueOf(riskAmountInt));
@@ -382,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (str.equals(""))
                     percent = 0;
                 else
-                    percent = Integer.parseInt(new String(s.toString()));
+                    percent = Float.parseFloat(new String(s.toString()));
                 if (balanceInt != 0) {
                     riskAmountInt = balanceInt * percent / 100;
                     riskAmount.setText(String.valueOf(riskAmountInt));
@@ -432,8 +416,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         barisResult.setVisibility(View.VISIBLE);
         resultList.setVisibility(View.VISIBLE);
 
-        isAdsConfig.clearBanner(adsBanner);
-        isAdsConfig.callBanner(MainActivity.this, adsBanner);
 
     }
 
@@ -445,8 +427,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         takeProfit.getText().clear();
         stopLoss.getText().clear();
         leverage.getText().clear();
-        isAdsConfig.clearBanner(adsBanner);
-        isAdsConfig.callNative(MainActivity.this, adsBanner, R.layout.admob_native_big, R.layout.max_big_native);
     }
 
     private void hitungKedua(boolean checked) {
@@ -547,26 +527,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.history:
                 Intent his = new Intent(MainActivity.this, CoinHistory.class);
-                isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
-                    @Override
-                    public void onClose() {
-                        startActivity(his);
-                    }
-
-                    @Override
-                    public void onShow() {
-                    }
-
-                    @Override
-                    public void onNotShow() {
-                        startActivity(his);
-                    }
-                });
-                isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
+                startActivity(his);
                 break;
             case R.id.fut_target_price:
                 Intent ftp = new Intent(MainActivity.this, FutureTargPrice.class);
-
                 isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
                     @Override
                     public void onClose() {
@@ -586,27 +550,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.tips:
                 Intent usage = new Intent(MainActivity.this, UsageActivity.class);
-
-                isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
-                    @Override
-                    public void onClose() {
-                        startActivity(usage);
-                    }
-
-                    @Override
-                    public void onShow() {
-                    }
-
-                    @Override
-                    public void onNotShow() {
-                        startActivity(usage);
-                    }
-                });
-                isAdsConfig.showInterst(MainActivity.this, true, LAMA_LOAD_ADS);
+                startActivity(usage);
                 break;
             case R.id.spot_profit:
                 Intent spot_profit = new Intent(MainActivity.this, SpotProfitActivity.class);
-
                 isAdsConfig.setIsAdsListener(new isAdsConfig.IsAdsListener() {
                     @Override
                     public void onClose() {
@@ -665,15 +612,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-    InputFilter filter = new InputFilter() {
-        public CharSequence filter(CharSequence source, int start, int end,
-                                   Spanned dest, int dstart, int dend) {
-            for (int i = start; i < end; i++) {
-                if (!Character.isDigit(source.charAt(i))) {
-                    return "";
-                }
-            }
-            return null;
-        }
-    };
 }

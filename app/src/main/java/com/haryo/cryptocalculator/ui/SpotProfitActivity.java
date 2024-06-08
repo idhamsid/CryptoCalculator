@@ -2,8 +2,6 @@ package com.haryo.cryptocalculator.ui;
 
 
 import android.os.Bundle;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,10 +32,6 @@ public class SpotProfitActivity extends AppCompatActivity {
         buyPriceText = findViewById(R.id.buyPriceText);
         sellPriceText = findViewById(R.id.sellPriceText);
         feeBrokerText = findViewById(R.id.feeBrokerText);
-        amount.setFilters(new InputFilter[] { filter });
-        buyPriceText.setFilters(new InputFilter[] { filter });
-        sellPriceText.setFilters(new InputFilter[] { filter });
-        feeBrokerText.setFilters(new InputFilter[] { filter });
 
         submitButton = findViewById(R.id.submitButton);
         clearButton = findViewById(R.id.refreshBtn);
@@ -117,15 +111,4 @@ public class SpotProfitActivity extends AppCompatActivity {
         return true;
     }
 
-    InputFilter filter = new InputFilter() {
-        public CharSequence filter(CharSequence source, int start, int end,
-                                   Spanned dest, int dstart, int dend) {
-            for (int i = start; i < end; i++) {
-                if (!Character.isDigit(source.charAt(i))) {
-                    return "";
-                }
-            }
-            return null;
-        }
-    };
 }

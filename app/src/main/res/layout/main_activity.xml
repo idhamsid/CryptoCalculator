@@ -39,6 +39,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <RelativeLayout
+                    android:id="@+id/adsBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
                 <LinearLayout
                     android:id="@+id/barisatu"
                     android:layout_width="match_parent"
@@ -79,7 +88,7 @@
                             android:id="@+id/balanceText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -108,7 +117,7 @@
                             android:id="@+id/riskPercentText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,7 +135,7 @@
                             android:id="@+id/riskAmountText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -156,7 +165,7 @@
                             android:id="@+id/entryPriceText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -175,7 +184,7 @@
                             android:id="@+id/takeProfitText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -205,7 +214,7 @@
                             android:id="@+id/stopLostText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -223,7 +232,7 @@
                             android:id="@+id/leverageText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -287,6 +296,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/riskReward"
+                            android:textColor="@color/editTextColor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -305,6 +315,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/posSizeCoin"
+                            android:textColor="@color/editTextColor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -323,6 +334,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/posSizeUsdt"
+                            android:textColor="@color/editTextColor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -339,6 +351,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/roeUsdt"
+                            android:textColor="@color/editTextColor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -355,6 +368,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/pnlUsdt"
+                            android:textColor="@color/editTextColor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -438,14 +452,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-
-        <RelativeLayout
-            android:id="@+id/adsBanner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_alignParentBottom="true"
-            android:visibility="visible" />
 
     </RelativeLayout>
     <com.google.android.material.navigation.NavigationView

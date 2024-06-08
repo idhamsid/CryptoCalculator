@@ -74,7 +74,7 @@
                         android:id="@+id/balanceText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -105,7 +105,7 @@
                         android:id="@+id/riskPercentText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,7 +123,7 @@
                         android:id="@+id/riskAmountText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -154,7 +154,7 @@
                         android:id="@+id/entryPriceText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,7 +173,7 @@
                         android:id="@+id/takeProfitText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -204,7 +204,7 @@
                         android:id="@+id/stopLostText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -222,7 +222,7 @@
                         android:id="@+id/feeText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -269,7 +269,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/barisResult">
@@ -286,6 +286,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/riskReward"
+                        android:textColor="@color/editTextColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -304,6 +305,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/posSizeCoin"
+                        android:textColor="@color/editTextColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -322,6 +324,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/posSizeUsdt"
+                        android:textColor="@color/editTextColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -338,6 +341,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/roeUsdt"
+                        android:textColor="@color/editTextColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -354,6 +358,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pnlUsdt"
+                        android:textColor="@color/editTextColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -369,7 +374,7 @@
                 android:backgroundTint="@color/bgButton"
                 android:text="RESET"
                 android:textColor="@color/white"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/resultList" />
@@ -384,7 +389,7 @@
                 android:backgroundTint="@color/bgButton"
                 android:text="Submit"
                 android:textColor="@color/white"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/resetButton" />

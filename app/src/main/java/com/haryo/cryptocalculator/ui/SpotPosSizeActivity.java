@@ -31,9 +31,9 @@ public class SpotPosSizeActivity extends AppCompatActivity {
     TextInputEditText balance, riskAmount, entryPrice, stopLoss,
             takeProfitText, riskPercent, feeText, coinNameText;
     TextInputEditText riskReward, posSizeCoin, posSizeUsdt, roeUsdt, pnlUsdt;
-    int percent = 0;
-    int balanceInt = 0;
-    int riskAmountInt = 0;
+    float percent = 0;
+    float balanceInt = 0;
+    float riskAmountInt = 0;
     LinearLayout resultList, barisResult;
     MaterialButton btnSubmit, resetButton;
     float balanceFloat, riskPercentFloat, riskAmountFloat, entryPriceFloat, stopLossFloat, takeProfitFloat, feeFloat;
@@ -81,7 +81,7 @@ public class SpotPosSizeActivity extends AppCompatActivity {
 
 
         isAdsConfig.loadInters(this, false);
-        isAdsConfig.callNative(this, adsBanner, R.layout.admob_native_big, R.layout.max_big_native);
+        isAdsConfig.callBanner(SpotPosSizeActivity.this, adsBanner);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -184,13 +184,12 @@ public class SpotPosSizeActivity extends AppCompatActivity {
             }
 
             @Override
-
             public void afterTextChanged(Editable s) {
                 String str = new String(s.toString());
                 if (str.equals(""))
                     balanceInt = 0;
                 else
-                    balanceInt = Integer.parseInt(new String(s.toString()));
+                    balanceInt = Float.parseFloat(new String(s.toString()));
                 if (percent != 0) {
                     riskAmountInt = balanceInt * percent / 100;
                     riskAmount.setText(String.valueOf(riskAmountInt));
@@ -216,7 +215,7 @@ public class SpotPosSizeActivity extends AppCompatActivity {
                 if (str.equals(""))
                     percent = 0;
                 else
-                    percent = Integer.parseInt(new String(s.toString()));
+                    percent = Float.parseFloat(new String(s.toString()));
                 if (balanceInt != 0) {
                     riskAmountInt = balanceInt * percent / 100;
                     riskAmount.setText(String.valueOf(riskAmountInt));
@@ -273,9 +272,6 @@ public class SpotPosSizeActivity extends AppCompatActivity {
         posSizeUsdt.setText(String.valueOf(positionSizeUSDT));
         roeUsdt.setText(String.valueOf(roeFloat));
         pnlUsdt.setText(String.valueOf(pnlUSDT));
-
-        isAdsConfig.clearBanner(adsBanner);
-        isAdsConfig.callBanner(SpotPosSizeActivity.this, adsBanner);
 
 
     }

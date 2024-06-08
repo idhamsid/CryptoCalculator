@@ -51,7 +51,7 @@
                 android:id="@+id/amountText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,7 +69,7 @@
                 android:id="@+id/buyPriceText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -99,7 +99,7 @@
                 android:id="@+id/profitText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -158,6 +158,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/sellPriceText"
+                android:textColor="@color/editTextColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -174,6 +175,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/profitText2"
+                android:textColor="@color/editTextColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>

@@ -52,7 +52,7 @@
                 android:id="@+id/entryPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,7 +70,7 @@
                 android:id="@+id/exitPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -101,7 +101,7 @@
                 android:id="@+id/initialMargin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -118,7 +118,7 @@
                 android:id="@+id/leverage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
@@ -222,6 +222,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/quantity"
+                android:textColor="@color/editTextColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -238,6 +239,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/roe"
+                android:textColor="@color/editTextColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -254,6 +256,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/pnl"
+                android:textColor="@color/editTextColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
