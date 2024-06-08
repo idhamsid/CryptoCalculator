@@ -47,6 +47,15 @@ public class SplashActivity extends AppCompatActivity {
                     },1000);
                 }
 
+        }else{
+            isAdsConfig.initAds(this);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    gotoMain();
+                }
+            },1000);
+
         }
     }
     private void loadUrlData() {
