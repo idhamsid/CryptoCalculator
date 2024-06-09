@@ -18,6 +18,8 @@ import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 import com.haryo.cryptocalculator.modul.DataCrypto;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class CoinHistory extends AppCompatActivity {
     private RecyclerView recCoinHistory;
@@ -50,6 +52,7 @@ public class CoinHistory extends AppCompatActivity {
         isAdsConfig.callBanner(this,adsBanner);
         isAdsConfig.loadInters(this,false);
         coinLists = sharedPref.getCoins(this);
+        Collections.reverse(coinLists);
         adapter = new CoinHistoryAdapter(coinLists,CoinHistory.this);
         recCoinHistory.setAdapter(adapter);
     }

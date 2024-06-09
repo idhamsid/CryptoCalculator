@@ -231,6 +231,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+        posSizeCoinName.setOnClickListener(v->{
+            ClipData clip = ClipData.newPlainText(getString(R.string.app_name), posSizeUsdtText.getText().toString());
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(MainActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+        });
         posSizeCoinName.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,6 +243,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(MainActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
 
+            }
+        });
+        posSizeUsdtName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), posSizeUsdtText.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(MainActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
             }
         });
         posSizeUsdtName.setEndIconOnClickListener(new View.OnClickListener() {
@@ -290,6 +303,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             hitungPertama();
             hitungKedua(data.getLong());
+
+
+            if (riskReward < 0) {
+                riskRewardText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+            }
+            if (positionSizeCoin < 0) {
+                posSizeCoinText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+            }
+            if (posSizeUsdt < 0) {
+                posSizeUsdtText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+            }
+            if (roeFloat < 0) {
+                roeUsdtText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+            }
+            if (pnlUsdt < 0) {
+                pnlUsdtText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+            }
+
             riskRewardText.setText(String.format(Locale.US, "%.8f", riskReward));
             posSizeCoinText.setText(String.format(Locale.US, "%.8f", positionSizeCoin));
             posSizeUsdtText.setText(String.format(Locale.US, "%.8f", posSizeUsdt));
@@ -614,8 +645,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setTitle(getString(R.string.app_name))
                 .setMessage(getString(R.string.message_about))
                 .setPositiveButton("OK", (DialogInterface.OnClickListener) (dialog, which) -> {
-                    // When the user click yes button then app will close
-                    finish();
+                    dialog.dismiss();
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

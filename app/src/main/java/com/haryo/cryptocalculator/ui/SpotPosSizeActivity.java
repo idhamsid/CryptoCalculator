@@ -110,6 +110,7 @@ public class SpotPosSizeActivity extends AppCompatActivity {
         takeProfit= findViewById(R.id.takeProfit);
         stopLostLay= findViewById(R.id.stopLost);
         posSizeCoinName= findViewById(R.id.posSizeCoinName);
+        posSizeUsdtName= findViewById(R.id.posSizeUsdtName);
 
 
         isAdsConfig.loadInters(this, false);
@@ -176,14 +177,6 @@ public class SpotPosSizeActivity extends AppCompatActivity {
             roeUsdt.setText(String.format(Locale.US, "%.8f",roeFloat));
             pnlUsdt.setText(String.format(Locale.US, "%.8f",pnlUSDT));
 
-//            hitungPertama();
-//            hitungKedua(data.getLong());
-//            riskRewardText.setText(String.format(Locale.US, "%.8f", riskReward));
-//            posSizeCoinText.setText(String.format(Locale.US, "%.8f", positionSizeCoin));
-//            posSizeUsdtText.setText(String.format(Locale.US, "%.8f", posSizeUsdt));
-//
-//            roeUsdtText.setText(String.format(Locale.US, "%.8f", roeFloat));
-//            pnlUsdtText.setText(String.format(Locale.US, "%.8f", pnlUsdt));
 
         }
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -210,6 +203,17 @@ public class SpotPosSizeActivity extends AppCompatActivity {
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(SpotPosSizeActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
             }
+        });
+        posSizeCoinName.setOnClickListener(v ->{
+            ClipData clip = ClipData.newPlainText(getString(R.string.app_name), posSizeCoin.getText().toString());
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(SpotPosSizeActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+        });
+        posSizeUsdtName.setOnClickListener(v ->{
+            ClipData clip = ClipData.newPlainText(getString(R.string.app_name), posSizeUsdt.getText().toString());
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(SpotPosSizeActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+
         });
         posSizeCoinName.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
