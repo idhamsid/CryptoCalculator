@@ -31,7 +31,9 @@ import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 import com.haryo.cryptocalculator.modul.DataCrypto;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -58,6 +60,8 @@ public class SpotPosSizeActivity extends AppCompatActivity {
         saveInsBundleState.putInt("pos", position);
 
     }
+
+    ArrayList<DataCrypto> coinLists;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +70,8 @@ public class SpotPosSizeActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             position = extras.getInt("pos");
-            dataCrypto = sharedPref.getCoins(this).get(position);
+            int positionReverse = sharedPref.getCoins(this).size() - (position+1);
+            dataCrypto = sharedPref.getCoins(this).get(positionReverse);
         } else {
             if (savedInstanceState != null) {
                 position = savedInstanceState.getInt("pos");
@@ -117,14 +122,13 @@ public class SpotPosSizeActivity extends AppCompatActivity {
         isAdsConfig.callBanner(SpotPosSizeActivity.this, adsBanner);
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (dataCrypto != null) {
-            DataCrypto data = sharedPref.getCoins(this).get(position);
-            coinNameText.setText(new String(data.getCoinName()));
-            balance.setText(new String(String.valueOf(data.getBalance())));
-            riskPercent.setText(new String(String.valueOf(data.getRiskpercent())));
-            entryPrice.setText(new String(String.valueOf(data.getEntryPrice())));
-            takeProfitText.setText(new String(String.valueOf(data.getTakeProfit())));
-            stopLoss.setText(new String(String.valueOf(data.getStopLost())));
-            feeText.setText(new String(String.valueOf(data.getLeverage())));
+            coinNameText.setText(new String(dataCrypto.getCoinName()));
+            balance.setText(new String(String.valueOf(dataCrypto.getBalance())));
+            riskPercent.setText(new String(String.valueOf(dataCrypto.getRiskpercent())));
+            entryPrice.setText(new String(String.valueOf(dataCrypto.getEntryPrice())));
+            takeProfitText.setText(new String(String.valueOf(dataCrypto.getTakeProfit())));
+            stopLoss.setText(new String(String.valueOf(dataCrypto.getStopLost())));
+            feeText.setText(new String(String.valueOf(dataCrypto.getLeverage())));
 
             btnSubmit.setVisibility(View.GONE);
             resetButton.setVisibility(View.VISIBLE);
@@ -132,13 +136,13 @@ public class SpotPosSizeActivity extends AppCompatActivity {
             barisResult.setVisibility(View.VISIBLE);
             resultList.setVisibility(View.VISIBLE);
 
-            balanceFloat = data.getBalance();
-            riskPercentFloat = data.getRiskpercent();
-            riskAmountFloat = data.getRiskAmount();
-            entryPriceFloat = data.getEntryPrice();
-            takeProfitFloat = data.getTakeProfit();
-            stopLossFloat = data.getStopLost();
-            feeFloat = data.getLeverage();
+            balanceFloat = dataCrypto.getBalance();
+            riskPercentFloat = dataCrypto.getRiskpercent();
+            riskAmountFloat = dataCrypto.getRiskAmount();
+            entryPriceFloat = dataCrypto.getEntryPrice();
+            takeProfitFloat = dataCrypto.getTakeProfit();
+            stopLossFloat = dataCrypto.getStopLost();
+            feeFloat = dataCrypto.getLeverage();
 
             if (feeText.getText().toString().equals("")) {
                 feeFloat = 0;

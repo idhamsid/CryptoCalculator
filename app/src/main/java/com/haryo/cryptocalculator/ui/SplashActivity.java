@@ -30,10 +30,8 @@ import org.json.JSONObject;
 public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
         if (REMOTE_ADS) {
                 if (checkConnectivity(SplashActivity.this)) {
                     loadUrlData();

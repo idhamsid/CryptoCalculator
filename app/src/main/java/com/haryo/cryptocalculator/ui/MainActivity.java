@@ -49,7 +49,9 @@ import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 import com.haryo.cryptocalculator.modul.DataCrypto;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
@@ -121,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.show();
     }
 
+    ArrayList<DataCrypto> coinListsM;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +133,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             position = extras.getInt("pos");
-            dataCrypto = sharedPref.getCoins(this).get(position);
+            int positionReverse = sharedPref.getCoins(this).size() - (position+1);
+            dataCrypto = sharedPref.getCoins(this).get(positionReverse);
         } else {
             if (savedInstanceState != null) {
                 position = savedInstanceState.getInt("pos");
@@ -231,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-        posSizeCoinName.setOnClickListener(v->{
+        posSizeCoinName.setOnClickListener(v -> {
             ClipData clip = ClipData.newPlainText(getString(R.string.app_name), posSizeUsdtText.getText().toString());
             clipboard.setPrimaryClip(clip);
             Toast.makeText(MainActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
@@ -261,8 +266,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(MainActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
             }
         });
-
-
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,14 +279,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         if (dataCrypto != null) {
-            DataCrypto data = sharedPref.getCoins(this).get(position);
-            coinName.setText(new String(data.getCoinName()));
-            balance.setText(new String(String.valueOf(data.getBalance())));
-            riskPercent.setText(new String(String.valueOf(data.getRiskpercent())));
-            entryPrice.setText(new String(String.valueOf(data.getEntryPrice())));
-            takeProfit.setText(new String(String.valueOf(data.getTakeProfit())));
-            stopLoss.setText(new String(String.valueOf(data.getStopLost())));
-            leverage.setText(new String(String.valueOf(data.getLeverage())));
+            coinName.setText(new String(dataCrypto.getCoinName()));
+            balance.setText(new String(String.valueOf(dataCrypto.getBalance())));
+            riskPercent.setText(new String(String.valueOf(dataCrypto.getRiskpercent())));
+            entryPrice.setText(new String(String.valueOf(dataCrypto.getEntryPrice())));
+            takeProfit.setText(new String(String.valueOf(dataCrypto.getTakeProfit())));
+            stopLoss.setText(new String(String.valueOf(dataCrypto.getStopLost())));
+            leverage.setText(new String(String.valueOf(dataCrypto.getLeverage())));
 
             barislima.setVisibility(View.GONE);
             submitButton.setVisibility(View.GONE);
@@ -292,17 +294,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             barisResult.setVisibility(View.VISIBLE);
             resultList.setVisibility(View.VISIBLE);
 
-            balanceFloat = data.getBalance();
-            riskPercentFloat = data.getRiskpercent();
-            riskAmountFloat = data.getRiskAmount();
-            entryPriceFloat = data.getEntryPrice();
-            takeProfitFloat = data.getTakeProfit();
-            stopLossFloat = data.getStopLost();
-            leverageFloat = data.getLeverage();
+            balanceFloat = dataCrypto.getBalance();
+            riskPercentFloat = dataCrypto.getRiskpercent();
+            riskAmountFloat = dataCrypto.getRiskAmount();
+            entryPriceFloat = dataCrypto.getEntryPrice();
+            takeProfitFloat = dataCrypto.getTakeProfit();
+            stopLossFloat = dataCrypto.getStopLost();
+            leverageFloat = dataCrypto.getLeverage();
 
 
             hitungPertama();
-            hitungKedua(data.getLong());
+            hitungKedua(dataCrypto.getLong());
 
 
             if (riskReward < 0) {
@@ -434,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         DataCrypto developers = new DataCrypto(coinNametext, balanceFloat, riskPercentFloat
                 , entryPriceFloat, stopLossFloat,
-                takeProfitFloat, riskAmountFloat, leverageFloat, isLong, getDateNow(),"Future Position");
+                takeProfitFloat, riskAmountFloat, leverageFloat, isLong, getDateNow(), "Future Position");
         sharedPref.addCoin(this, developers);
 
 

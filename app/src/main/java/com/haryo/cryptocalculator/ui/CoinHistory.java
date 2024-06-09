@@ -23,11 +23,12 @@ import java.util.Collections;
 
 public class CoinHistory extends AppCompatActivity {
     private RecyclerView recCoinHistory;
-    ArrayList<DataCrypto> coinLists;
+    public static ArrayList<DataCrypto> coinLists;
     SharedPreference sharedPref;
     CoinHistoryAdapter adapter;
     GridLayoutManager mLayoutManager;
     RelativeLayout adsBanner;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,12 +50,13 @@ public class CoinHistory extends AppCompatActivity {
         recCoinHistory = findViewById(R.id.recCoinHistory);
         mLayoutManager = new GridLayoutManager(this, 1);
         recCoinHistory.setLayoutManager(mLayoutManager);
-        isAdsConfig.callBanner(this,adsBanner);
-        isAdsConfig.loadInters(this,false);
+        isAdsConfig.callBanner(this, adsBanner);
+        isAdsConfig.loadInters(this, false);
         coinLists = sharedPref.getCoins(this);
+        adapter = new CoinHistoryAdapter(coinLists, CoinHistory.this);
         Collections.reverse(coinLists);
-        adapter = new CoinHistoryAdapter(coinLists,CoinHistory.this);
         recCoinHistory.setAdapter(adapter);
+
     }
 
     @Override

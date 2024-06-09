@@ -23,6 +23,7 @@ import com.haryo.cryptocalculator.ui.MainActivity;
 import com.haryo.cryptocalculator.ui.SpotPosSizeActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CoinHistoryAdapter extends RecyclerView.Adapter {
 
@@ -54,9 +55,8 @@ public class CoinHistoryAdapter extends RecyclerView.Adapter {
 
 
     public CoinHistoryAdapter(ArrayList<DataCrypto> coinListss, Context context) {
-        coinLists = coinListss;
+        coinLists =  coinListss;
         this.context = context;
-
     }
 
     @NonNull
@@ -64,6 +64,7 @@ public class CoinHistoryAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.history_list, parent, false);
+
         return new ViewHolder(v);
     }
 
