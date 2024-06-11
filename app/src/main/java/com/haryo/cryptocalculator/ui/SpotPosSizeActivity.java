@@ -161,12 +161,8 @@ public class SpotPosSizeActivity extends AppCompatActivity {
             if (riskRewardFloat < 0) {
                 riskReward.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
             }
-            if (posSizeFloat < 0) {
-                posSizeCoin.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
-            }
-            if (positionSizeUSDT < 0) {
-                posSizeUsdt.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
-            }
+                posSizeCoin.setTextColor(getResources().getColor(R.color.black));
+                posSizeUsdt.setTextColor(getResources().getColor(R.color.black));
             if (roeFloat < 0) {
                 roeUsdt.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
             }
@@ -178,6 +174,7 @@ public class SpotPosSizeActivity extends AppCompatActivity {
             riskReward.setText(String.format(Locale.US, "%.8f",riskRewardFloat));
             posSizeCoin.setText(String.format(Locale.US, "%.8f",posSizeFloat));
             posSizeUsdt.setText(String.format(Locale.US, "%.8f",positionSizeUSDT));
+            riskAmount.setText(String.format(Locale.US, "%.8f", riskAmountFloat));
             roeUsdt.setText(String.format(Locale.US, "%.8f",roeFloat));
             pnlUsdt.setText(String.format(Locale.US, "%.8f",pnlUSDT));
 
@@ -256,7 +253,7 @@ public class SpotPosSizeActivity extends AppCompatActivity {
             }
         });
         btnSubmit.setOnClickListener(v -> {
-            if (balance.getText().toString().equals("") || riskPercent.getText().toString().equals("")) {
+            if (coinNameText.getText().toString().equals("") || balance.getText().toString().equals("") || riskPercent.getText().toString().equals("")) {
                 Snackbar.make(findViewById(R.id.main_content), "Please fill the form", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.purple_700)).show();
             } else {
                 if (balance.getText().toString().equals("") || riskPercent.getText().toString().equals("") || entryPrice.getText().toString().equals("")
@@ -365,12 +362,9 @@ public class SpotPosSizeActivity extends AppCompatActivity {
         if (riskRewardFloat < 0) {
             riskReward.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
         }
-        if (posSizeFloat < 0) {
-            posSizeCoin.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
-        }
-        if (positionSizeUSDT < 0) {
-            posSizeUsdt.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
-        }
+
+        posSizeCoin.setTextColor(getResources().getColor(R.color.black));
+        posSizeUsdt.setTextColor(getResources().getColor(R.color.black));
         if (roeFloat < 0) {
             roeUsdt.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
         }

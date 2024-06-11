@@ -13,6 +13,8 @@ appAdmob = "23.1.0.0"
 identifier = "18.1.0"
 openads="2.6.4"
 volley = "1.2.1"
+onesignal = "[5.0.0, 5.99.99]"
+
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -28,7 +30,7 @@ applovin-google = { group = "com.applovin.mediation", name = "google-adapter", v
 google-identifier = {group = "com.google.android.gms", name="play-services-ads-identifier",version.ref="identifier"}
 openads = {group="com.lazygeniouz",name="aoa_manager",version.ref="openads"}
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
-
+onesignal = {group = "com.onesignal",name = "OneSignal", version.ref="onesignal"}
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 

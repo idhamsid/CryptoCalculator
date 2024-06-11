@@ -6,6 +6,8 @@ public class Settings {
     public static final String URL_DATA = "";
     public static int INTERVAL = 0;
     public static int LAMA_LOAD_ADS = 2;
+    public static Boolean GDPR_CHILD_DIRECTED = false;
+    public static String ONESIGNAL_APP_ID = "fb2af4bf-96ab-4423-9864-e62871644be0";
 
     //    ADMOB
     public static String INTER = "ca-app-pub-3940256099942544/1033173712";

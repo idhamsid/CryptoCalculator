@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gray">#BDBDBD</color>
+    <color name="darkgray">#4A4A4A</color>
+    <color name="bgToolbar">#777777</color>
+    <color name="bgButton">#19204C</color>
+    <color name="biru">#5785FA</color>
+    <color name="background">#D0D0D1</color>
+    <color name="backgroundEditField">#E6E6E8</color>
+
+    <color name="backgroundLoad">#B2979797</color>
+    <color name="backgroundDialog">#83979797</color>
+
+    <color name="primaryText">#000000</color>
+    <color name="native_title">#000000</color>
+    <color name="native_description">#000000</color>
+    <color name="native_text_button">#ffffff</color>
+    <color name="native_button">#FF3700B3</color>
+    <color name="native_background">#f5f6fa</color>
+    <color name="native_stroke_background">#808080</color>
+    <color name="native_back">#f7f1e3</color>
+    <color name="color_youtube_red_light">#E30511</color>
+    <color name="color_youtube_red_dark">#A1030C</color>
+    <color name="color_youtube_gray">#F1F1F1</color>
+    <color name="color_youtube_grayb">#FF9800</color>
+    <color name="nativeBG">#F8D17D</color>
+    <color name="button_install">#2196F3</color>
+
+    <color name="borderBtn">#FFB74D</color>
+    <color name="editTextColor">#25872C</color>
+
+</resources>

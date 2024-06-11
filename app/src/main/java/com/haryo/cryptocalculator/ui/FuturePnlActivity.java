@@ -20,10 +20,11 @@ import com.haryo.cryptocalculator.isConfig.isAdsConfig;
 
 public class FuturePnlActivity extends AppCompatActivity {
     TextInputEditText initialMargin, exitPrice, entryPrice, leverage, quantity, roe, pnl;
-    MaterialButton calculate,refreshBtn;
+    MaterialButton calculate, refreshBtn;
     RadioButton longSelect, shortSelect;
     float leverageFloat, initMarginFloat, exitPriceFloat, entryPriceFloat, quantityFloat, roeFloat, pnlFloat;
     RelativeLayout adsBanner;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +59,7 @@ public class FuturePnlActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.i("adslog", "exception : " + e.getMessage());
         }
-        refreshBtn.setOnClickListener(v->{
+        refreshBtn.setOnClickListener(v -> {
             clearAll();
         });
         calculate.setOnClickListener(v -> {
@@ -66,17 +67,24 @@ public class FuturePnlActivity extends AppCompatActivity {
                     || initialMargin.getText().toString().equals("") || leverage.getText().toString().equals("")) {
                 Snackbar.make(findViewById(R.id.main_content), "Please fill the form", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.purple_700)).show();
             } else {
-                    cekEntry();
+                cekEntry();
                 if (longSelect.isChecked()) {
 
                     if (roeFloat < 0) {
                         roe.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    } else {
+                        roe.setTextColor(getResources().getColor(R.color.editTextColor));
                     }
                     if (quantityFloat < 0) {
                         quantity.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    } else {
+                        quantity.setTextColor(getResources().getColor(R.color.editTextColor));
                     }
                     if (pnlFloat < 0) {
                         pnl.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    } else {
+                        pnl.setTextColor(getResources().getColor(R.color.editTextColor));
+
                     }
                     quantity.setText(String.valueOf(quantityFloat));
                     roe.setText(String.valueOf(roeFloat));
@@ -85,16 +93,24 @@ public class FuturePnlActivity extends AppCompatActivity {
                 } else if (shortSelect.isChecked()) {
                     if (quantityFloat < 0) {
                         quantity.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    } else {
+                        quantity.setTextColor(getResources().getColor(R.color.editTextColor));
+
                     }
                     quantity.setText(String.valueOf(quantityFloat));
                     float roeShort = roeFloat * -1;
                     if (roeShort < 0) {
                         roe.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    } else {
+                        roe.setTextColor(getResources().getColor(R.color.editTextColor));
                     }
                     roe.setText(String.valueOf(roeShort));
                     float pnlfloatShort = pnlFloat * -1;
                     if (pnlfloatShort < 0) {
                         pnl.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
+                    } else {
+                        pnl.setTextColor(getResources().getColor(R.color.editTextColor));
+
                     }
                     pnl.setText(String.valueOf(pnlfloatShort));
                 }

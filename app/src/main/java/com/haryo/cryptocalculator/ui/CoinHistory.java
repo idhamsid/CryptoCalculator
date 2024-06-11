@@ -54,7 +54,9 @@ public class CoinHistory extends AppCompatActivity {
         isAdsConfig.loadInters(this, false);
         coinLists = sharedPref.getCoins(this);
         adapter = new CoinHistoryAdapter(coinLists, CoinHistory.this);
-        Collections.reverse(coinLists);
+        if (coinLists != null) {
+            Collections.reverse(coinLists);
+        }
         recCoinHistory.setAdapter(adapter);
 
     }

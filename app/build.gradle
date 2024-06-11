@@ -7,7 +7,7 @@ android {
     compileSdk  34
 
     defaultConfig {
-        applicationId  "com.haryo.cryptocalculator"
+        applicationId  "com.test.firemsg"
         minSdk 24
         targetSdk  34
         versionCode  1
@@ -47,4 +47,5 @@ dependencies {
     implementation(libs.applovin.google)
     implementation(libs.google.identifier)
     implementation(libs.openads)
+    implementation(libs.onesignal)
 }

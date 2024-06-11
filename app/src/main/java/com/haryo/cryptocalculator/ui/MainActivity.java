@@ -1,6 +1,9 @@
 package com.haryo.cryptocalculator.ui;
 
+import static com.haryo.cryptocalculator.BuildConfig.DEBUG;
+import static com.haryo.cryptocalculator.isConfig.Settings.GDPR_CHILD_DIRECTED;
 import static com.haryo.cryptocalculator.isConfig.Settings.LAMA_LOAD_ADS;
+import static com.haryo.cryptocalculator.isConfig.Settings.ONESIGNAL_APP_ID;
 import static com.haryo.cryptocalculator.isConfig.isAdsConfig.nativeAd;
 import static com.haryo.cryptocalculator.isConfig.isAdsConfig.nativeAdLoader;
 import static com.haryo.cryptocalculator.isConfig.isAdsConfig.nativeAdMax;
@@ -11,8 +14,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,6 +39,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -46,7 +53,11 @@ import com.haryo.cryptocalculator.BuildConfig;
 import com.haryo.cryptocalculator.R;
 import com.haryo.cryptocalculator.isConfig.SharedPreference;
 import com.haryo.cryptocalculator.isConfig.isAdsConfig;
+import com.haryo.cryptocalculator.isConfig.isGDPR;
 import com.haryo.cryptocalculator.modul.DataCrypto;
+import com.onesignal.Continue;
+import com.onesignal.OneSignal;
+import com.onesignal.debug.LogLevel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     void dialogExit() {
-        final Dialog dialog = new Dialog(MainActivity.this, R.style.SheetDialog);
+        final Dialog dialog = new Dialog(MainActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCancelable(false);
@@ -129,11 +140,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        isGDPR.loadGdpr(this, GDPR_CHILD_DIRECTED);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+        }
         sharedPref = new SharedPreference();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             position = extras.getInt("pos");
-            int positionReverse = sharedPref.getCoins(this).size() - (position+1);
+            int positionReverse = sharedPref.getCoins(this).size() - (position + 1);
             dataCrypto = sharedPref.getCoins(this).get(positionReverse);
         } else {
             if (savedInstanceState != null) {
@@ -310,12 +327,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (riskReward < 0) {
                 riskRewardText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
             }
-            if (positionSizeCoin < 0) {
-                posSizeCoinText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
-            }
-            if (posSizeUsdt < 0) {
-                posSizeUsdtText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
-            }
+            posSizeCoinText.setTextColor(getResources().getColor(R.color.black));
+            posSizeUsdtText.setTextColor(getResources().getColor(R.color.black));
             if (roeFloat < 0) {
                 roeUsdtText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
             }
@@ -326,13 +339,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             riskRewardText.setText(String.format(Locale.US, "%.8f", riskReward));
             posSizeCoinText.setText(String.format(Locale.US, "%.8f", positionSizeCoin));
             posSizeUsdtText.setText(String.format(Locale.US, "%.8f", posSizeUsdt));
-
+            riskAmount.setText(String.format(Locale.US, "%.8f", riskAmountFloat));
             roeUsdtText.setText(String.format(Locale.US, "%.8f", roeFloat));
             pnlUsdtText.setText(String.format(Locale.US, "%.8f", pnlUsdt));
 
         }
         submitButton.setOnClickListener(v -> {
-            if (balance.getText().toString().equals("") || riskPercent.getText().toString().equals("") || entryPrice.getText().toString().equals("")
+            if (coinName.getText().toString().equals("") || balance.getText().toString().equals("") || riskPercent.getText().toString().equals("") || entryPrice.getText().toString().equals("")
                     || takeProfit.getText().toString().equals("") || stopLoss.getText().toString().equals("") || leverage.getText().toString().equals("")) {
                 Snackbar.make(findViewById(R.id.main_content), "Please fill the form", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.purple_700)).show();
             } else {
@@ -415,12 +428,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (riskReward < 0) {
             riskRewardText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
         }
-        if (positionSizeCoin < 0) {
-            posSizeCoinText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
-        }
-        if (posSizeUsdt < 0) {
-            posSizeUsdtText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
-        }
+
+        posSizeCoinText.setTextColor(getResources().getColor(R.color.black));
+        posSizeUsdtText.setTextColor(getResources().getColor(R.color.black));
         if (roeFloat < 0) {
             roeUsdtText.setTextColor(getResources().getColor(R.color.color_youtube_red_light));
         }

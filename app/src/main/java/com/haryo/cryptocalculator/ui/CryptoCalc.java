@@ -6,6 +6,7 @@ import static com.haryo.cryptocalculator.isConfig.Settings.OPENADS;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
@@ -17,34 +18,21 @@ import com.lazygeniouz.aoa.idelay.InitialDelay;
 
 
 public class CryptoCalc extends Application {
-
     private static CryptoCalc mInstance;
+    public static AppOpenAdManager appOpenAdManager;
+    public static String openads;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        SharedPreferences openadsSharedPref = getSharedPreferences("openads", Context.MODE_PRIVATE);
-        OPENADS = openadsSharedPref.getString("admobopenads",OPENADS);
-        MobileAds.initialize(
-                this,
-                new OnInitializationCompleteListener() {
-                    @Override
-                    public void onInitializationComplete(InitializationStatus initializationStatus) {
-                    }
-                });
-
+        SharedPreferences myScore = getSharedPreferences("openads", Context.MODE_PRIVATE);
+        OPENADS = myScore.getString("admobopenads", OPENADS);
+        Configs configs = new Configs(InitialDelay.NONE,
+                OPENADS,
+                new AdRequest.Builder().build(),
+                () -> true);
+        appOpenAdManager = AppOpenAdManager.get(this, configs);
         mInstance = this;
-        AppOpenAdManager adManager = AppOpenAdManager.get(
-                this,
-                new Configs(
-                        InitialDelay.NONE,
-                        OPENADS,
-                        new AdRequest.Builder().build(),
-                        () -> true
-                )
-        );
-        adManager.loadAppOpenAd();
-
     }
 
     public static synchronized CryptoCalc getInstance() {
