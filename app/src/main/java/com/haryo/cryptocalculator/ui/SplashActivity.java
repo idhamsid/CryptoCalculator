@@ -151,13 +151,14 @@ public class SplashActivity extends AppCompatActivity {
                         Settings.BANNER = c.getString("admob_banner");
                         Settings.OPENADS = c.getString("admob_openads");
                         Settings.MAX_BANNER = c.getString("max_banner");
-                        Settings.MAX_INTERST = c.getString("max_inter)");
+                        Settings.MAX_INTERST = c.getString("max_inter");
                         Settings.MAX_NATIV = c.getString("max_native");
                         Settings.INTERVAL = c.getInt("interval");
                         callopenAds();
 
                     }
                 } catch (JSONException e) {
+                    Log.i("adslog", "onResponse:  " + e.getMessage());
                     callopenAds();
                     e.printStackTrace();
                 }
@@ -165,6 +166,7 @@ public class SplashActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.i("adslog", "onErrorResponse:  " + error.getMessage());
                 callopenAds();
                 Toast.makeText(SplashActivity.this, "Error" + error.toString(), Toast.LENGTH_SHORT).show();
 

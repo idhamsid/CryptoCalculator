@@ -320,7 +320,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:enabled="false"
+                    android:focusable="false"
+                    android:enabled="true"
                     android:hint="Position Size USDT"
                     app:endIconDrawable="@drawable/baseline_content_copy_24"
                     app:endIconMode="custom">
@@ -328,6 +329,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/posSizeUsdt"
                         android:textColor="@color/editTextColor"
+                        android:focusable="false"
+                        android:enabled="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>

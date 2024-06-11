@@ -216,6 +216,14 @@ public class SpotPosSizeActivity extends AppCompatActivity {
             Toast.makeText(SpotPosSizeActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
 
         });
+        posSizeUsdtName.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipData clip = ClipData.newPlainText(getString(R.string.app_name), posSizeCoin.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(SpotPosSizeActivity.this, "Copied to clipboard !", Toast.LENGTH_SHORT).show();
+            }
+        });
         posSizeCoinName.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

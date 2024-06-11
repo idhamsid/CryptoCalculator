@@ -2,8 +2,8 @@ package com.haryo.cryptocalculator.isConfig;
 
 public class Settings {
     public static String URL_TIPS = "https://google.com";
-    public static Boolean REMOTE_ADS = false;
-    public static final String URL_DATA = "";
+    public static Boolean REMOTE_ADS = true;
+    public static final String URL_DATA = "https://maybusid.my.id/jglobal/adscrypto.json";
     public static int INTERVAL = 0;
     public static int LAMA_LOAD_ADS = 2;
     public static Boolean GDPR_CHILD_DIRECTED = false;
